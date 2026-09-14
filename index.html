@@ -1,0 +1,889 @@
+<title>SparkVIA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+:root{
+  --ground:#F3F6F8; --surface:#FFFFFF; --surface-2:#EAF0F4; --line:#D7E0E8; --line-strong:#B9C7D3;
+  --ink:#13202B; --muted:#5C6E7E; --faint:#8A9BAA;
+  --student:#0F4C81; --student-soft:#E3EEF8; --student-ink:#0B3A63;
+  --npo:#0E6B5C; --npo-soft:#DFF1EC; --npo-ink:#0A5044;
+  --saffron:#E8930C; --saffron-soft:#FCEFD9; --saffron-ink:#8A5300;
+  --good:#1F8A4C; --good-soft:#DFF3E6; --warn:#B96A12; --warn-soft:#FBEBD6; --crit:#C43D3D; --crit-soft:#F9E1E1;
+  --shadow:0 1px 2px rgba(19,32,43,.06), 0 8px 24px -12px rgba(19,32,43,.18);
+  --focus:0 0 0 3px rgba(15,76,129,.35);
+  --r-sm:8px; --r-md:12px; --r-lg:18px;
+  --font-display:"Bricolage Grotesque","Instrument Sans",system-ui,sans-serif;
+  --font-body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --accent:var(--student); --accent-soft:var(--student-soft); --accent-ink:var(--student-ink);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0D141B; --surface:#16202A; --surface-2:#1D2933; --line:#27343F; --line-strong:#3A4A58;
+    --ink:#E7EEF4; --muted:#9DAFBE; --faint:#6F8291;
+    --student:#7FB3E6; --student-soft:#173149; --student-ink:#B9D6F2;
+    --npo:#5CC4AE; --npo-soft:#123A33; --npo-ink:#A9E4D6;
+    --saffron:#F2A83B; --saffron-soft:#3D2A0F; --saffron-ink:#F7C87C;
+    --good:#4CC57E; --good-soft:#153826; --warn:#E39A3F; --warn-soft:#3B2A12; --crit:#EE6B6B; --crit-soft:#3E1C1C;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+    --focus:0 0 0 3px rgba(127,179,230,.45);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0D141B; --surface:#16202A; --surface-2:#1D2933; --line:#27343F; --line-strong:#3A4A58;
+  --ink:#E7EEF4; --muted:#9DAFBE; --faint:#6F8291;
+  --student:#7FB3E6; --student-soft:#173149; --student-ink:#B9D6F2;
+  --npo:#5CC4AE; --npo-soft:#123A33; --npo-ink:#A9E4D6;
+  --saffron:#F2A83B; --saffron-soft:#3D2A0F; --saffron-ink:#F7C87C;
+  --good:#4CC57E; --good-soft:#153826; --warn:#E39A3F; --warn-soft:#3B2A12; --crit:#EE6B6B; --crit-soft:#3E1C1C;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+  --focus:0 0 0 3px rgba(127,179,230,.45);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.5;min-height:100vh}
+body[data-role="org"]{--accent:var(--npo);--accent-soft:var(--npo-soft);--accent-ink:var(--npo-ink)}
+body[data-role="moe"]{--accent:var(--student);--accent-soft:var(--student-soft);--accent-ink:var(--student-ink)}
+h1,h2,h3,h4{font-family:var(--font-display);margin:0;line-height:1.15;text-wrap:balance;letter-spacing:-.01em}
+h1{font-size:2rem;font-weight:700}
+h2{font-size:1.45rem;font-weight:650}
+h3{font-size:1.1rem;font-weight:650}
+p{margin:0}
+a{color:var(--accent)}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:none;box-shadow:var(--focus)}
+.num{font-family:var(--font-mono);font-variant-numeric:tabular-nums;font-weight:600}
+.muted{color:var(--muted)}
+.faint{color:var(--faint)}
+.small{font-size:.86rem}
+.eyebrow{font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;font-weight:600;color:var(--muted)}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- top bar ---------- */
+.topbar{position:sticky;top:0;z-index:20;background:var(--surface);border-bottom:1px solid var(--line);}
+.topbar-in{max-width:1240px;margin:0 auto;padding:0 20px;height:60px;display:flex;align-items:center;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:700;font-size:1.15rem;letter-spacing:-.01em;color:var(--ink);text-decoration:none;background:none;border:0;padding:0}
+.brand .mark{width:30px;height:30px;border-radius:9px;background:var(--accent);display:grid;place-items:center;color:#fff;flex:none}
+.brand .mark svg{width:18px;height:18px}
+.brand em{font-style:normal;color:var(--accent)}
+.topbar .spacer{flex:1}
+.seg{display:inline-flex;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;border-radius:999px;padding:6px 14px;font-weight:600;font-size:.86rem;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.seg button.st[aria-pressed="true"]{color:var(--student)}
+.seg button.np[aria-pressed="true"]{color:var(--npo)}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:.78rem;font-weight:600;background:var(--surface-2);color:var(--muted);border:1px solid var(--line);white-space:nowrap}
+.pill.accent{background:var(--accent-soft);color:var(--accent-ink);border-color:transparent}
+.pill.saffron{background:var(--saffron-soft);color:var(--saffron-ink);border-color:transparent}
+.pill.good{background:var(--good-soft);color:var(--good);border-color:transparent}
+.pill.warn{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.pill.crit{background:var(--crit-soft);color:var(--crit);border-color:transparent}
+.pill .dot{width:7px;height:7px;border-radius:50%;background:currentColor}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:10px;padding:9px 16px;font-weight:600;font-size:.92rem;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);transition:background .15s,border-color .15s,transform .05s;text-decoration:none;white-space:nowrap}
+.btn:hover{background:var(--surface-2)}
+.btn:active{transform:translateY(1px)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+:root[data-theme="dark"] .btn.primary{color:#0D141B}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn.primary{color:#0D141B}}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--accent-ink)}
+.btn.ghost:hover{background:var(--accent-soft)}
+.btn.sm{padding:6px 12px;font-size:.84rem;border-radius:8px}
+.btn.danger{color:var(--crit);border-color:var(--crit-soft);background:var(--crit-soft)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn svg{width:16px;height:16px}
+
+/* ---------- shell ---------- */
+.shell{max-width:1240px;margin:0 auto;padding:24px 20px 80px;display:grid;grid-template-columns:224px minmax(0,1fr);gap:28px;align-items:start}
+.rail{position:sticky;top:84px;display:flex;flex-direction:column;gap:4px}
+.rail .who{padding:12px 12px 14px;margin-bottom:6px;border-radius:var(--r-md);background:var(--surface);border:1px solid var(--line)}
+.rail .who .name{font-weight:650;font-size:.95rem}
+.rail .who .sub{font-size:.8rem;color:var(--muted);margin-top:2px}
+.navbtn{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:0;background:transparent;padding:9px 12px;border-radius:10px;font-weight:600;color:var(--muted);font-size:.92rem}
+.navbtn svg{width:18px;height:18px;flex:none;opacity:.85}
+.navbtn:hover{background:var(--surface-2);color:var(--ink)}
+.navbtn[aria-current="page"]{background:var(--accent-soft);color:var(--accent-ink)}
+.navbtn .count{margin-left:auto;font-family:var(--font-mono);font-size:.74rem;background:var(--surface);border:1px solid var(--line);padding:1px 7px;border-radius:999px;color:var(--muted)}
+.navbtn[aria-current="page"] .count{background:var(--surface)}
+.main{min-width:0;display:flex;flex-direction:column;gap:22px}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.page-head .lede{color:var(--muted);margin-top:6px;max-width:62ch}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);padding:20px}
+.card.tight{padding:16px}
+.grid{display:grid;gap:16px}
+.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}
+.stack{display:flex;flex-direction:column;gap:12px}
+.row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.between{justify-content:space-between}
+.divider{height:1px;background:var(--line);margin:4px 0}
+
+/* ---------- landing ---------- */
+.landing{max-width:1040px;margin:0 auto;padding:48px 20px 80px;display:flex;flex-direction:column;gap:40px}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:36px;align-items:center}
+.hero h1{font-size:clamp(2.1rem,4.4vw,3.2rem);font-weight:700;letter-spacing:-.02em}
+.hero h1 em{font-style:normal;color:var(--saffron)}
+.hero .lede{font-size:1.08rem;color:var(--muted);max-width:52ch;margin-top:14px}
+.hero .stats{display:flex;gap:26px;margin-top:22px;flex-wrap:wrap}
+.hero .stat .v{font-family:var(--font-display);font-size:1.6rem;font-weight:700;line-height:1}
+.hero .stat .k{font-size:.8rem;color:var(--muted);margin-top:4px}
+.role-cards{display:grid;gap:14px}
+.role-card{display:block;width:100%;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:var(--r-lg);padding:20px 22px;transition:transform .15s,box-shadow .15s,border-color .15s;box-shadow:var(--shadow)}
+.role-card:hover{transform:translateY(-2px);border-color:var(--line-strong)}
+.role-card .top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.role-card .icon{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;color:#fff}
+.role-card .icon svg{width:22px;height:22px}
+.role-card.student .icon{background:var(--student)}
+.role-card.npo .icon{background:var(--npo)}
+.role-card h3{font-size:1.15rem}
+.role-card p{color:var(--muted);font-size:.92rem}
+.role-card .go{margin-top:12px;font-weight:600;font-size:.9rem;display:inline-flex;align-items:center;gap:6px}
+.role-card.student .go{color:var(--student)}
+.role-card.npo .go{color:var(--npo)}
+.how{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.how .step{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:18px}
+.how .step .n{font-family:var(--font-mono);font-size:.78rem;color:var(--saffron-ink);background:var(--saffron-soft);display:inline-block;padding:2px 8px;border-radius:999px;margin-bottom:10px}
+.how .step h3{font-size:1rem;margin-bottom:6px}
+.how .step p{color:var(--muted);font-size:.9rem}
+
+/* ---------- forms ---------- */
+label.field{display:flex;flex-direction:column;gap:6px;font-size:.86rem;font-weight:600;color:var(--ink)}
+label.field .hint{font-weight:400;color:var(--muted);font-size:.8rem}
+.input,select.input,textarea.input{width:100%;background:var(--surface);border:1px solid var(--line-strong);border-radius:10px;padding:9px 12px;font-size:.95rem;font-weight:400;color:var(--ink)}
+textarea.input{min-height:90px;resize:vertical}
+.input:focus{border-color:var(--accent);box-shadow:var(--focus);outline:none}
+.input[aria-invalid="true"]{border-color:var(--crit)}
+.err{color:var(--crit);font-size:.8rem;font-weight:500}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line-strong);background:var(--surface);border-radius:999px;padding:7px 13px;font-size:.88rem;font-weight:500;display:inline-flex;align-items:center;gap:7px;transition:background .12s,border-color .12s}
+.chip:hover{border-color:var(--accent)}
+.chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-ink)}
+.chip .sec{font-size:.72rem;color:var(--faint);font-weight:500}
+.chip[aria-pressed="true"] .sec{color:inherit;opacity:.7}
+.chip.static{cursor:default;padding:4px 10px;font-size:.8rem}
+.chip.static.want{border-style:dashed}
+.chip.static.have{background:var(--good-soft);border-color:transparent;color:var(--good)}
+.chip.static.gain{background:var(--saffron-soft);border-color:transparent;color:var(--saffron-ink)}
+.rating{display:inline-flex;gap:4px}
+.rating button{width:34px;height:34px;border-radius:8px;border:1px solid var(--line-strong);background:var(--surface);font-family:var(--font-mono);font-size:.8rem;font-weight:600;color:var(--muted)}
+.rating button[aria-pressed="true"]{background:var(--saffron);border-color:var(--saffron);color:#fff}
+.rating button.lit{background:var(--saffron-soft);border-color:var(--saffron);color:var(--saffron-ink)}
+.rating button[aria-pressed="true"].lit{background:var(--saffron);color:#fff}
+.rate-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.rate-row:last-child{border-bottom:0}
+.rate-row .name{font-weight:600}
+.rate-row .sub{font-size:.78rem;color:var(--muted)}
+.rate-row .lab{font-size:.78rem;color:var(--saffron-ink);min-width:78px;text-align:right}
+
+/* wizard */
+.wiz-progress{display:flex;gap:6px;margin-bottom:6px}
+.wiz-progress span{flex:1;height:5px;border-radius:999px;background:var(--line)}
+.wiz-progress span.done{background:var(--accent)}
+.wiz-steps{display:flex;gap:14px;font-size:.8rem;color:var(--faint);flex-wrap:wrap}
+.wiz-steps b{color:var(--accent-ink);font-weight:600}
+.wiz-foot{display:flex;justify-content:space-between;gap:10px;margin-top:8px;flex-wrap:wrap}
+
+/* ---------- match cards ---------- */
+.match{display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px;align-items:start;padding:18px 20px}
+.ring{width:82px;height:82px;position:relative;flex:none}
+.ring svg{width:82px;height:82px;transform:rotate(-90deg)}
+.ring .track{stroke:var(--line);fill:none;stroke-width:7}
+.ring .bar{stroke:var(--accent);fill:none;stroke-width:7;stroke-linecap:round;transition:stroke-dashoffset .6s ease}
+.ring .lbl{position:absolute;inset:0;display:grid;place-items:center;text-align:center;line-height:1}
+.ring .lbl .v{font-family:var(--font-mono);font-weight:600;font-size:1.25rem}
+.ring .lbl .k{font-size:.62rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-top:3px}
+.match .title{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.match h3{font-size:1.12rem}
+.match .org{color:var(--muted);font-size:.9rem;margin-top:2px}
+.match .meta{display:flex;flex-wrap:wrap;gap:6px 14px;color:var(--muted);font-size:.84rem;margin-top:10px}
+.match .meta span{display:inline-flex;align-items:center;gap:5px}
+.match .meta svg{width:14px;height:14px;opacity:.7}
+.reasons{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.reason{font-size:.8rem;padding:4px 10px;border-radius:999px;background:var(--good-soft);color:var(--good);font-weight:600;display:inline-flex;gap:5px;align-items:center}
+.reason.learn{background:var(--saffron-soft);color:var(--saffron-ink)}
+.reason.group{background:var(--accent-soft);color:var(--accent-ink)}
+.reason.neutral{background:var(--surface-2);color:var(--muted)}
+.reason svg{width:12px;height:12px;flex:none}
+.breakdown{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:14px}
+.bd{font-size:.76rem;color:var(--muted)}
+.bd .k{display:flex;justify-content:space-between;margin-bottom:4px}
+.bd .k b{color:var(--ink);font-family:var(--font-mono);font-weight:600}
+.bd .t{height:5px;border-radius:999px;background:var(--line);overflow:hidden}
+.bd .f{height:100%;border-radius:999px;background:var(--accent)}
+.bd.passion .f{background:var(--saffron)}
+.match .actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;align-items:center}
+.passion-tag{display:inline-flex;align-items:center;gap:5px;font-family:var(--font-mono);font-size:.78rem;font-weight:600;color:var(--saffron-ink);background:var(--saffron-soft);padding:3px 9px;border-radius:999px}
+.passion-tag svg{width:12px;height:12px}
+.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.filters select{width:auto;min-width:150px}
+.empty{text-align:center;padding:40px 20px;color:var(--muted);border:1px dashed var(--line-strong);border-radius:var(--r-lg)}
+.empty h3{color:var(--ink);margin-bottom:6px}
+
+/* ---------- tables / lists ---------- */
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th{text-align:left;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line)}
+td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right}
+.bar{height:8px;border-radius:999px;background:var(--line);overflow:hidden}
+.bar .f{height:100%;background:var(--accent);border-radius:999px}
+.bar.saffron .f{background:var(--saffron)}
+.status{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:999px}
+.status.applied{background:var(--surface-2);color:var(--muted)}
+.status.accepted{background:var(--good-soft);color:var(--good)}
+.status.declined{background:var(--crit-soft);color:var(--crit)}
+.status.completed{background:var(--accent-soft);color:var(--accent-ink)}
+
+/* stat tiles */
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:14px 16px}
+.tile .k{font-size:.76rem;color:var(--muted);font-weight:600}
+.tile .v{font-family:var(--font-display);font-size:1.7rem;font-weight:700;line-height:1.1;margin-top:4px;font-variant-numeric:tabular-nums}
+.tile .s{font-size:.78rem;color:var(--faint);margin-top:3px}
+
+/* group cards */
+.group{padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+.group .head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.group h3{font-size:1rem}
+.group .school{font-size:.84rem;color:var(--muted)}
+.avatars{display:flex}
+.avatars span{width:26px;height:26px;border-radius:50%;background:var(--accent-soft);color:var(--accent-ink);font-size:.68rem;font-weight:700;display:grid;place-items:center;border:2px solid var(--surface);margin-left:-6px}
+.avatars span:first-child{margin-left:0}
+
+/* portfolio */
+.hours{display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center}
+.bigring{width:120px;height:120px;position:relative}
+.bigring svg{width:120px;height:120px;transform:rotate(-90deg)}
+.bigring .track{stroke:var(--line);fill:none;stroke-width:9}
+.bigring .bar{stroke:var(--saffron);fill:none;stroke-width:9;stroke-linecap:round}
+.bigring .lbl{position:absolute;inset:0;display:grid;place-items:center;text-align:center;line-height:1}
+.bigring .lbl .v{font-family:var(--font-mono);font-size:1.5rem;font-weight:600}
+.bigring .lbl .k{font-size:.66rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-top:4px}
+.statement{background:var(--surface-2);border-radius:var(--r-md);padding:16px 18px;font-size:.95rem;line-height:1.65;max-width:70ch;white-space:pre-wrap}
+.timeline{display:flex;flex-direction:column;gap:0}
+.tl{display:grid;grid-template-columns:14px 1fr;gap:12px;padding:10px 0}
+.tl .dotc{width:14px;display:flex;justify-content:center;padding-top:6px}
+.tl .dotc i{width:10px;height:10px;border-radius:50%;background:var(--accent);display:block}
+.tl.done .dotc i{background:var(--good)}
+
+/* modal + toast */
+.modal-bg{position:fixed;inset:0;background:rgba(9,17,24,.5);display:grid;place-items:center;z-index:50;padding:20px}
+.modal{background:var(--surface);border-radius:var(--r-lg);max-width:640px;width:100%;padding:24px;box-shadow:var(--shadow);max-height:90vh;overflow:auto}
+.modal pre{background:var(--surface-2);padding:14px;border-radius:10px;font-family:var(--font-mono);font-size:.78rem;overflow:auto;white-space:pre-wrap}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--ground);padding:10px 16px;border-radius:10px;font-weight:600;font-size:.9rem;box-shadow:var(--shadow);z-index:60;opacity:0;transition:opacity .2s,transform .2s;pointer-events:none;max-width:calc(100% - 32px);text-align:center}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(-4px)}
+
+/* explain panel */
+details.explain{border:1px solid var(--line);border-radius:var(--r-md);background:var(--surface)}
+details.explain summary{cursor:pointer;padding:12px 16px;font-weight:600;list-style:none;display:flex;justify-content:space-between;align-items:center}
+details.explain summary::-webkit-details-marker{display:none}
+details.explain summary::after{content:"+";font-family:var(--font-mono);color:var(--muted)}
+details.explain[open] summary::after{content:"–"}
+details.explain .body{padding:0 16px 16px;color:var(--muted);font-size:.9rem;max-width:72ch}
+details.explain .body code{font-family:var(--font-mono);font-size:.8rem;background:var(--surface-2);padding:1px 6px;border-radius:5px;color:var(--ink)}
+.formula{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:10px 0}
+.formula div{background:var(--surface-2);border-radius:8px;padding:8px 10px;font-size:.8rem}
+.formula div b{display:block;font-family:var(--font-mono);color:var(--ink)}
+
+/* ---------- v2: candidates, schools, heat map, stepper ---------- */
+.cand{display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px;align-items:start;padding:16px 18px}
+.cand .rank{font-family:var(--font-display);font-weight:700;font-size:1.05rem;color:var(--accent-ink);background:var(--accent-soft);border-radius:10px;padding:6px 10px;white-space:nowrap}
+.cand.best{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.cand .nums{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:10px}
+.cand .nums .k{font-size:.74rem;color:var(--muted);font-weight:600}
+.cand .nums .v{font-family:var(--font-mono);font-size:1.15rem;font-weight:600;line-height:1.2}
+.cand .nums .s{font-size:.74rem;color:var(--faint)}
+.anon{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;color:var(--muted);background:var(--surface-2);padding:3px 9px;border-radius:999px}
+.anon svg{width:12px;height:12px}
+.school{padding:16px 18px;display:flex;flex-direction:column;gap:10px;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:var(--r-lg);cursor:pointer;transition:border-color .15s,transform .15s}
+.school:hover{border-color:var(--accent);transform:translateY(-1px)}
+.school h3{font-size:1rem}
+.persona{display:flex;flex-direction:column;gap:6px}
+.persona .p{display:grid;grid-template-columns:minmax(0,1fr) 44px;gap:8px;align-items:center;font-size:.82rem}
+.persona .p .t{height:6px;border-radius:999px;background:var(--line);overflow:hidden;margin-top:3px}
+.persona .p .f{height:100%;background:var(--accent);border-radius:999px}
+.persona .p:nth-child(2) .f{opacity:.75}
+.persona .p:nth-child(3) .f{opacity:.5}
+.persona .p .pct{font-family:var(--font-mono);font-size:.8rem;text-align:right;font-weight:600}
+.heat{overflow-x:auto}
+.heat table{font-size:.82rem;min-width:720px}
+.heat th{position:sticky;top:0;background:var(--surface)}
+.heat td.c{text-align:center;font-family:var(--font-mono);font-weight:600;padding:6px 4px;border-radius:0}
+.heat td.c span{display:inline-block;min-width:44px;padding:4px 6px;border-radius:6px;color:var(--ink)}
+.stepper{display:flex;gap:0;align-items:center;flex-wrap:wrap}
+.stepper .st{display:flex;align-items:center;gap:8px;font-size:.8rem;color:var(--faint);font-weight:600}
+.stepper .st i{width:22px;height:22px;border-radius:50%;border:2px solid var(--line-strong);display:grid;place-items:center;font-style:normal;font-family:var(--font-mono);font-size:.7rem}
+.stepper .st.done{color:var(--ink)}
+.stepper .st.done i{background:var(--accent);border-color:var(--accent);color:#fff}
+.stepper .st.now{color:var(--accent-ink)}
+.stepper .st.now i{border-color:var(--accent);color:var(--accent-ink)}
+.stepper .ln{width:28px;height:2px;background:var(--line);margin:0 8px}
+.stepper .ln.done{background:var(--accent)}
+.status.matched{background:var(--surface-2);color:var(--muted)}
+.status.sent{background:var(--saffron-soft);color:var(--saffron-ink)}
+.status.forwarded{background:var(--accent-soft);color:var(--accent-ink)}
+.status.accepted{background:var(--good-soft);color:var(--good)}
+.status.declined{background:var(--crit-soft);color:var(--crit)}
+.flag{font-size:.78rem;padding:3px 9px;border-radius:999px;font-weight:600;display:inline-flex;align-items:center;gap:5px}
+.flag.ok{background:var(--good-soft);color:var(--good)}
+.flag.warn{background:var(--warn-soft);color:var(--warn)}
+.flag.bad{background:var(--crit-soft);color:var(--crit)}
+.flag.info{background:var(--surface-2);color:var(--muted)}
+.flag svg{width:12px;height:12px;flex:none}
+.small svg{width:14px;height:14px;vertical-align:-2px;opacity:.75}
+.klist{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:.88rem}
+.klist dt{color:var(--muted);font-weight:500;margin:0}
+.klist dd{margin:0;font-weight:600}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:.76rem;color:var(--muted);align-items:center}
+.legend i{display:inline-block;width:14px;height:10px;border-radius:3px;vertical-align:middle;margin-right:4px}
+@media (max-width:560px){.cand{grid-template-columns:1fr}.cand .nums{grid-template-columns:repeat(2,minmax(0,1fr))}.stepper .ln{width:12px;margin:0 4px}}
+
+/* mobile */
+@media (max-width:900px){
+  .shell{grid-template-columns:1fr;gap:16px;padding-top:14px}
+  .rail{position:static;flex-direction:row;overflow-x:auto;gap:6px;padding-bottom:4px;scrollbar-width:none}
+  .rail::-webkit-scrollbar{display:none}
+  .rail .who{display:none}
+  .navbtn{white-space:nowrap;background:var(--surface);border:1px solid var(--line);padding:8px 12px}
+  .navbtn[aria-current="page"]{border-color:transparent}
+  .hero{grid-template-columns:1fr}
+  .how,.grid.three,.grid.four,.tiles,.breakdown{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .formula{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .topbar-in{height:56px;gap:10px}
+  .seg button{padding:6px 10px;font-size:.8rem}
+  .topbar .hide-sm{display:none}
+}
+@media (max-width:560px){
+  .grid.two,.how,.grid.three,.grid.four,.tiles{grid-template-columns:1fr}
+  .match{grid-template-columns:1fr}
+  .hours{grid-template-columns:1fr}
+  .breakdown{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (prefers-reduced-motion: reduce){
+  *{transition:none !important;animation:none !important}
+}
+</style>
+
+<div id="app"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+/* =====================================================================
+   SparkVIA v2 — school-level matching (EduTech 2030)
+   Two sides: Organisation console · MOE console. All data is test data.
+   ===================================================================== */
+'use strict';
+
+/* ---------- MySkillsFuture / Skills Framework sectors used as interest categories ---------- */
+const SECTORS = [
+  {id:'env',   name:'Environmental Services', emoji:'🌱'},
+  {id:'hc',    name:'Healthcare',             emoji:'🩺'},
+  {id:'ss',    name:'Social Service',         emoji:'🤝'},
+  {id:'ict',   name:'Infocomm Technology',    emoji:'💻'},
+  {id:'media', name:'Media',                  emoji:'🎬'},
+  {id:'arts',  name:'Arts',                   emoji:'🎨'},
+  {id:'design',name:'Design',                 emoji:'✏️'},
+  {id:'food',  name:'Food Services',          emoji:'🍚'},
+  {id:'tae',   name:'Training & Adult Education', emoji:'📚'},
+  {id:'ec',    name:'Early Childhood',        emoji:'🧸'},
+  {id:'land',  name:'Landscape',              emoji:'🌳'},
+  {id:'fin',   name:'Financial Services',     emoji:'💳'},
+  {id:'log',   name:'Logistics',              emoji:'📦'},
+  {id:'tour',  name:'Tourism',                emoji:'🧭'},
+];
+const SEC = Object.fromEntries(SECTORS.map(s=>[s.id,s]));
+const REGIONS = ['North','North-East','East','Central','West'];
+const ADJ = {'North':['North-East','Central'],'North-East':['North','East','Central'],'East':['North-East','Central'],'Central':['North','North-East','East','West'],'West':['Central']};
+
+/* ---------- 48 of 118 MOE schools (sample of the MySkillsFuture export) ---------- */
+const SCHOOL_LIST = [
+  ['Anderson Secondary School','sec','North'],['Anglo-Chinese School (Independent)','sec','Central'],['Ang Mo Kio Secondary School','sec','North-East'],
+  ['Anglican High School','sec','East'],['Bedok South Secondary School','sec','East'],['Bowen Secondary School','sec','North-East'],
+  ['Bukit Batok Secondary School','sec','West'],['Bukit Panjang Government High School','sec','West'],['Catholic High School','sec','Central'],
+  ['Cedar Girls\' Secondary School','sec','Central'],['Chung Cheng High School (Main)','sec','East'],['Clementi Town Secondary School','sec','West'],
+  ['Compassvale Secondary School','sec','North-East'],['Crescent Girls\' School','sec','Central'],['Dunman High School','sec','East'],
+  ['Eunoia Junior College','jc','Central'],['Greendale Secondary School','sec','North-East'],['Hillgrove Secondary School','sec','West'],
+  ['Hwa Chong Institution','jc','West'],['Jurong Pioneer Junior College','jc','West'],['Kent Ridge Secondary School','sec','West'],
+  ['Methodist Girls\' School','sec','West'],['Nan Hua High School','sec','West'],['Nanyang Girls\' High School','sec','Central'],
+  ['National Junior College','jc','Central'],['Naval Base Secondary School','sec','North'],['Ngee Ann Secondary School','sec','East'],
+  ['Pasir Ris Secondary School','sec','East'],['Queensway Secondary School','sec','Central'],['Raffles Institution','jc','Central'],
+  ['River Valley High School','sec','West'],['Sembawang Secondary School','sec','North'],['Serangoon Garden Secondary School','sec','North-East'],
+  ['Singapore Chinese Girls\' School','sec','Central'],['Springfield Secondary School','sec','East'],['St. Andrew\'s Junior College','jc','Central'],
+  ['St. Joseph\'s Institution','sec','Central'],['Swiss Cottage Secondary School','sec','West'],['Tampines Meridian Junior College','jc','East'],
+  ['Tanjong Katong Secondary School','sec','East'],['Temasek Junior College','jc','East'],['Victoria Junior College','jc','East'],
+  ['Whitley Secondary School','sec','Central'],['Woodlands Ring Secondary School','sec','North'],['Yio Chu Kang Secondary School','sec','North-East'],
+  ['Yishun Innova Junior College','jc','North'],['Yuan Ching Secondary School','sec','West'],['Zhonghua Secondary School','sec','North-East'],
+];
+
+/* blackout periods (2026 term calendar, sample) */
+const BLACKOUTS = {
+  sec:[ {label:'Sec 4 Preliminary exams', from:'2026-09-14', to:'2026-09-25'}, {label:'End-of-year exams', from:'2026-10-05', to:'2026-10-16'},
+        {label:'GCE O-Level written papers', from:'2026-10-19', to:'2026-11-13'}, {label:'Sports & Games Day', from:'2026-11-18', to:'2026-11-18'} ],
+  jc: [ {label:'JC2 Preliminary exams', from:'2026-09-14', to:'2026-09-30'}, {label:'JC1 Promotional exams', from:'2026-10-05', to:'2026-10-14'},
+        {label:'GCE A-Level written papers', from:'2026-11-02', to:'2026-12-04'}, {label:'Open House', from:'2026-12-10', to:'2026-12-10'} ],
+};
+
+function rng(seed){ let s=seed>>>0; return ()=>{ s=(s*1664525+1013904223)>>>0; return s/4294967296; }; }
+
+function makeSchools(){
+  const r=rng(2030);
+  const pick=arr=>arr[Math.floor(r()*arr.length)];
+  return SCHOOL_LIST.map(([name,type,region],i)=>{
+    const enrol = type==='jc' ? 1400+Math.floor(r()*500) : 900+Math.floor(r()*500);
+    const cohort = Math.round(enrol*(0.72+r()*0.22));      // students with a MySkillsFuture interest record
+    // each student records ~2 interest categories; schools have 2–3 strong "signature" sectors
+    const weights = {}; SECTORS.forEach(s=>weights[s.id]=0.3+r()*0.7);
+    const sig=[]; while(sig.length<3){ const s=pick(SECTORS).id; if(!sig.includes(s)) sig.push(s); }
+    sig.forEach((s,k)=>weights[s]+= k===0 ? 2.2+r()*1.2 : 1.1+r()*0.9);
+    const total=Object.values(weights).reduce((a,b)=>a+b,0);
+    const interest={}; SECTORS.forEach(s=>interest[s.id]=Math.round(cohort*2*weights[s.id]/total));
+    const releasable = Math.round(cohort*(0.08+r()*0.14));
+    const supervisors = 3+Math.floor(r()*9), firstAid = Math.min(supervisors, Math.floor(r()*4));
+    const bl = BLACKOUTS[type]; const blackouts = [bl[0], bl[1], ...(r()>0.4?[bl[2]]:[]), ...(r()>0.6?[bl[3]]:[])];
+    return {id:'sch'+String(i+1).padStart(2,'0'), name, type, region, enrol, cohort, interest, releasable, hoursBudget:pick([10,15,20,25,30]), supervisors, firstAid, blackouts,
+            updated:'2026-09-'+String(1+Math.floor(r()*11)).padStart(2,'0')};
+  });
+}
+const SCHOOLS = makeSchools();
+const SCHOOL = Object.fromEntries(SCHOOLS.map(s=>[s.id,s]));
+function persona(s){ return SECTORS.map(x=>({id:x.id, n:s.interest[x.id], pct:s.interest[x.id]/s.cohort})).sort((a,b)=>b.n-a.n).slice(0,3); }
+
+/* ---------- organisations (fictional) ---------- */
+const ORGS = [
+  {id:'o1', name:'Green Sprout SG', type:'npo', region:'North', blurb:'Community reforestation and neighbourhood garden collective.'},
+  {id:'o2', name:'Silver Circle Befrienders', type:'npo', region:'Central', blurb:'Befriending and digital-literacy support for seniors living alone.'},
+  {id:'o3', name:'Code4Good Singapore', type:'npo', region:'West', blurb:'Volunteer technologists building tools for charities.'},
+  {id:'o4', name:'Harbour Studios', type:'industry', region:'Central', blurb:'Creative agency offering youth media apprenticeships.'},
+  {id:'o5', name:'Second Harvest Kitchen', type:'npo', region:'East', blurb:'Rescues surplus food and cooks meals for rental-block residents.'},
+  {id:'o6', name:'Northlight Fintech', type:'industry', region:'North', blurb:'Payments start-up running a financial-literacy outreach programme.'},
+  {id:'o7', name:'Little Steps Preschools', type:'industry', region:'North-East', blurb:'Preschool operator running reading-buddy programmes.'},
+  {id:'o8', name:'Kampong Heritage Trust', type:'npo', region:'East', blurb:'Documents vanishing trades and oral histories for public archives.'},
+];
+const ORG = Object.fromEntries(ORGS.map(o=>[o.id,o]));
+
+/* ---------- seed projects (test data, various stages) ---------- */
+const SEED_PROJECTS = [
+  {id:'pr1', orgId:'o1', title:'Mangrove replanting weekends', sectors:['env','land'], slots:40, hours:12, start:'2026-10-24', end:'2026-11-28', firstAid:true, region:'North',
+   blurb:'Plant and monitor 2,000 mangrove saplings across five Saturdays with NParks-trained leads. Students log survival data for a public dashboard.', createdAt:'2026-09-08', status:'sent', sentTo:3},
+  {id:'pr2', orgId:'o2', title:'Digital buddies for seniors', sectors:['ss','hc'], slots:60, hours:16, start:'2026-11-16', end:'2026-12-18', firstAid:false, region:'Central',
+   blurb:'One-to-one coaching for seniors on Singpass, video calls and scam-spotting at three Toa Payoh senior activity centres.', createdAt:'2026-09-05', status:'forwarded', sentTo:3, forwardedTo:'sch29', forwardedAt:'2026-09-11'},
+  {id:'pr3', orgId:'o3', title:'Charity data clean-up sprint', sectors:['ict'], slots:24, hours:20, start:'2026-11-23', end:'2026-12-11', firstAid:false, region:'West',
+   blurb:'A mentored two-week sprint tidying five years of donation records in Python and building the board\'s dashboard.', createdAt:'2026-09-02', status:'accepted', sentTo:3, forwardedTo:'sch19', forwardedAt:'2026-09-06', decidedAt:'2026-09-09'},
+  {id:'pr4', orgId:'o4', title:'Youth media apprenticeship', sectors:['media','design'], slots:15, hours:24, start:'2026-11-23', end:'2026-12-18', firstAid:false, region:'Central',
+   blurb:'Shadow a real client project from brief to final cut. Industry mentorship with a portfolio-ready deliverable.', createdAt:'2026-09-10', status:'matched', sentTo:0},
+  {id:'pr5', orgId:'o5', title:'Food rescue & community kitchen', sectors:['food','ss'], slots:80, hours:10, start:'2026-10-25', end:'2026-12-13', firstAid:true, region:'East',
+   blurb:'Sunday collections from Pasir Ris markets, then cooking 300 meals with our kitchen leads for rental-block residents.', createdAt:'2026-09-07', status:'sent', sentTo:5},
+  {id:'pr6', orgId:'o6', title:'Financial literacy peer facilitators', sectors:['fin','tae'], slots:30, hours:14, start:'2026-11-21', end:'2026-12-12', firstAid:false, region:'North',
+   blurb:'Students co-run budgeting workshops for Sec 1–2s at Yishun CCs using our simulator. Facilitator training included.', createdAt:'2026-09-09', status:'declined', sentTo:3, forwardedTo:'sch46', forwardedAt:'2026-09-10', decidedAt:'2026-09-12', declineReason:'A-Level window — cannot release JC2s'},
+  {id:'pr7', orgId:'o7', title:'Reading buddies at preschools', sectors:['ec','tae'], slots:36, hours:12, start:'2026-11-23', end:'2026-12-11', firstAid:false, region:'North-East',
+   blurb:'Weekly shared-reading sessions with K1–K2 children across six Sengkang centres. Early-childhood educators supervise.', createdAt:'2026-09-11', status:'sent', sentTo:3},
+  {id:'pr8', orgId:'o8', title:'Oral history interviewers', sectors:['arts','media'], slots:20, hours:15, start:'2026-11-28', end:'2026-12-19', firstAid:false, region:'East',
+   blurb:'Record and transcribe interviews with Geylang Serai\'s last songkok makers and kueh sellers for a public archive.', createdAt:'2026-09-12', status:'matched', sentTo:0},
+];
+
+/* ---------- school-level matching engine ---------- */
+const W = {interest:.50, capacity:.20, supervision:.15, calendar:.15};
+const FULL_INTEREST_PCT = 0.55;   // 55% of a cohort interested = full marks on interest fit
+const CAPACITY_HEADROOM = 2;      // full capacity marks when interested & releasable students are 2x the slots
+const STUDENTS_PER_SUPERVISOR = 15;
+
+function daysBetween(a,b){ return Math.round((new Date(b+'T00:00:00')-new Date(a+'T00:00:00'))/86400000)+1; }
+function overlapDays(a1,a2,b1,b2){ const s=a1>b1?a1:b1, e=a2<b2?a2:b2; return s<=e ? daysBetween(s,e) : 0; }
+
+function matchSchool(project, school, opts){
+  const counts = project.sectors.map(s=>school.interest[s]||0);
+  const max = Math.max(...counts), sum=counts.reduce((a,b)=>a+b,0);
+  const interested = Math.round(max + 0.5*(sum-max));              // students with a matching interest (secondary sector half-weighted)
+  const pct = interested/school.cohort;
+  const interestFit = Math.min(1, pct/FULL_INTEREST_PCT);
+  const per = persona(school).map(p=>p.id);
+  const personaHit = project.sectors.filter(s=>per.includes(s));
+
+  const potential = Math.min(interested, school.releasable);        // students who both want it and can be released
+  let capacityFit = Math.min(1, potential/(CAPACITY_HEADROOM*project.slots));
+  const hoursOk = school.hoursBudget >= project.hours; if(!hoursOk) capacityFit*=0.6;
+
+  const supNeeded = Math.ceil(project.slots/STUDENTS_PER_SUPERVISOR);
+  let supervisionFit = Math.min(1, school.supervisors/Math.max(1,supNeeded));
+  const faOk = !project.firstAid || school.firstAid>0; if(!faOk) supervisionFit*=0.6;
+
+  const span = daysBetween(project.start, project.end);
+  const clashes = school.blackouts.map(b=>({b, d:overlapDays(project.start,project.end,b.from,b.to)})).filter(x=>x.d>0);
+  const clashDays = clashes.reduce((n,x)=>n+x.d,0);
+  const calendarFit = Math.max(0, 1 - clashDays/span);
+
+  const regionFit = school.region===project.region ? 1 : (ADJ[school.region]||[]).includes(project.region) ? .6 : .3;
+
+  const score = Math.round(100*(W.interest*interestFit + W.capacity*capacityFit + W.supervision*supervisionFit + W.calendar*calendarFit));
+
+  const flags=[];
+  if(personaHit.length) flags.push({k:'ok', t:SEC[personaHit[0]].name+' is in this school\'s top-3 persona'});
+  if(potential>=project.slots) flags.push({k:'ok', t:'Can fill all '+project.slots+' slots ('+potential+' releasable & interested)'});
+  else flags.push({k:potential>=project.slots*0.6?'warn':'bad', t:'Only '+potential+' of '+project.slots+' slots fillable'});
+  if(!hoursOk) flags.push({k:'warn', t:'VIA budget '+school.hoursBudget+' h/student < '+project.hours+' h needed'});
+  if(school.supervisors<supNeeded) flags.push({k:'warn', t:school.supervisors+' supervisors for '+supNeeded+' needed'});
+  if(!faOk) flags.push({k:'bad', t:'No first-aid trained staff (project requires)'});
+  clashes.forEach(x=>flags.push({k:x.d>=span*0.4?'bad':'warn', t:x.b.label+' overlaps '+x.d+' day'+(x.d===1?'':'s')}));
+  if(!clashes.length) flags.push({k:'ok', t:'No exam or event clash'});
+  if(regionFit===1) flags.push({k:'info', t:'Same region ('+school.region+')'});
+
+  return {score, interested, pct, potential, interestFit, personaHit, supNeeded, clashes, regionFit,
+          parts:{interest:Math.round(interestFit*100), capacity:Math.round(capacityFit*100), supervision:Math.round(supervisionFit*100), calendar:Math.round(calendarFit*100)}, flags};
+}
+function shortlist(project){ return SCHOOLS.map(s=>({s, m:matchSchool(project,s)})).sort((a,b)=>b.m.score-a.m.score || b.m.potential-a.m.potential); }
+
+/* ---------- state ---------- */
+const KEY='sparkvia.v2';
+function seedProjects(){ // seeded "forwarded" projects always point at the engine's own top-ranked school
+  return SEED_PROJECTS.map(p=>{ const q=JSON.parse(JSON.stringify(p)); if(q.forwardedTo) q.forwardedTo=shortlist(q)[0].s.id; return q; }); }
+const defaultState=()=>({ role:null, view:null, orgId:'o1', projects:seedProjects(), openProject:null, draft:null, schoolFilter:{sector:'all', region:'all', q:''}, mapSector:'env', queueFilter:'sent', openSchool:null });
+let S=load();
+function load(){ try{ const raw=localStorage.getItem(KEY); if(raw){ return Object.assign(defaultState(), JSON.parse(raw)); } }catch(e){} return defaultState(); }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function resetDemo(){ try{ localStorage.removeItem(KEY); }catch(e){} S=defaultState(); render(); toast('Demo reset to test data'); }
+
+/* ---------- helpers ---------- */
+const h = s => String(s==null?'':s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const $ = sel => document.querySelector(sel);
+const projById = id => S.projects.find(p=>p.id===id);
+const pct = x => Math.round(x*100)+'%';
+const plural=(n,w)=>n+' '+w+(n===1?'':'s');
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove('show'),2600); }
+function fmtDate(iso){ if(!iso) return ''; const d=new Date(iso+'T00:00:00'); return d.toLocaleDateString('en-SG',{day:'numeric',month:'short'}); }
+function fmtRange(a,b){ return fmtDate(a)+' – '+fmtDate(b); }
+const today='2026-09-13';
+const STATUS = {matched:'Shortlist ready', sent:'With MOE', forwarded:'With school', accepted:'School accepted', declined:'School declined'};
+function ring(v){ const r=34, c=2*Math.PI*r, off=c*(1-Math.max(0,Math.min(100,v))/100);
+  return `<div class="ring" aria-label="${v} out of 100"><svg viewBox="0 0 82 82"><circle class="track" cx="41" cy="41" r="${r}"/><circle class="bar" cx="41" cy="41" r="${r}" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}"/></svg><div class="lbl"><div class="v">${v}</div><div class="k">fit</div></div></div>`; }
+function heatColor(p){ // 0..0.45 → surface-2 → accent
+  const t=Math.max(0,Math.min(1,p/0.55)); return `background:color-mix(in srgb, var(--accent) ${Math.round(t*85)}%, var(--surface-2));color:${t>0.55?'#fff':'var(--ink)'}`; }
+const I = {
+  spark:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l1.8 5.7L19.5 9.5 13.8 11.3 12 17l-1.8-5.7L4.5 9.5l5.7-1.8z"/><path d="M19 16l.8 2.2 2.2.8-2.2.8L19 22l-.8-2.2-2.2-.8 2.2-.8z"/></svg>',
+  grid:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>',
+  plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+  inbox:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13l2-8h14l2 8v6H3z"/><path d="M3 13h5l1.5 3h5L16 13h5"/></svg>',
+  school:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10l9-5 9 5-9 5z"/><path d="M7 12.5V17c0 1.5 2.5 3 5 3s5-1.5 5-3v-4.5"/><path d="M21 10v5"/></svg>',
+  map:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15M15 6v15"/></svg>',
+  building:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M9 7h2M13 7h2M9 11h2M13 11h2M9 15h2M13 15h2M10 21v-3h4v3"/></svg>',
+  clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 22s7-6.2 7-12a7 7 0 0 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></svg>',
+  cal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
+  users:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><path d="M2 20c0-3.5 3-6 7-6s7 2.5 7 6"/><circle cx="17" cy="9" r="2.5"/><path d="M17 14c3 0 5 2 5 5"/></svg>',
+  arrow:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg>',
+  lock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>',
+  eye:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"/><circle cx="12" cy="12" r="3"/></svg>',
+  send:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4z"/></svg>',
+  back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>',
+};
+</script>
+<script>
+/* =====================================================================
+   Rendering
+   ===================================================================== */
+const app=$('#app');
+const clone=o=>JSON.parse(JSON.stringify(o));
+
+function render(){
+  document.body.dataset.role = S.role || 'org';
+  const focused = document.activeElement && document.activeElement.dataset ? document.activeElement.dataset.fid : null;
+  if(!S.role){ app.innerHTML=landing(); }
+  else{
+    let body='';
+    if(S.role==='org'){ if(!S.view) S.view='projects'; body={projects:vProjects,new:vNew,project:vProject}[S.view](); }
+    else { if(!S.view) S.view='overview'; body={overview:vOverview,schools:vSchools,school:vSchool,map:vMap,queue:vQueue}[S.view](); }
+    app.innerHTML = topbar() + `<div class="shell"><nav class="rail" aria-label="Sections">${S.role==='org'?orgNav():moeNav()}</nav><main class="main">${body}</main></div>`;
+  }
+  if(focused){ const el=app.querySelector(`[data-fid="${focused}"]`); if(el) el.focus(); }
+  save();
+}
+function topbar(){
+  return `<header class="topbar"><div class="topbar-in">
+    <button class="brand" data-action="home" aria-label="SparkVIA home"><span class="mark">${I.spark}</span>Spark<em>VIA</em></button>
+    <span class="pill hide-sm">Prototype · test data</span><span class="spacer"></span>
+    <div class="seg" role="group" aria-label="Switch console">
+      <button class="np" aria-pressed="${S.role==='org'}" data-action="role" data-role="org">Organisation</button>
+      <button class="st" aria-pressed="${S.role==='moe'}" data-action="role" data-role="moe">MOE</button>
+    </div>
+    <button class="btn ghost sm hide-sm" data-action="reset">Reset demo</button></div></header>`;
+}
+function landing(){
+  const totalStudents=SCHOOLS.reduce((n,s)=>n+s.cohort,0);
+  return `<div class="landing">
+    <header class="row between"><span class="brand"><span class="mark">${I.spark}</span>Spark<em>VIA</em></span><span class="row"><span class="pill">EduTech 2030 · Prototype</span><button class="btn ghost sm" data-action="reset">Reset demo</button></span></header>
+    <section class="hero"><div>
+      <p class="eyebrow">School-level matching for passion-based volunteerism</p>
+      <h1 style="margin-top:10px">Send every project to the school that already <em>wants</em> it.</h1>
+      <p class="lede">SparkVIA builds a persona for each MOE school from its students' MySkillsFuture interest categories, then matches an organisation's project to the most compatible schools the moment it is posted — weighing interest, releasable headcount, supervisors and the term calendar.</p>
+      <div class="stats"><div class="stat"><div class="v num">${SCHOOLS.length}<span class="muted" style="font-size:1rem">/118</span></div><div class="k">schools in this test export</div></div>
+        <div class="stat"><div class="v num">${totalStudents.toLocaleString('en-SG')}</div><div class="k">students with interest records</div></div>
+        <div class="stat"><div class="v num">${SECTORS.length}</div><div class="k">MySkillsFuture sectors</div></div></div>
+    </div>
+    <div class="role-cards">
+      <button class="role-card npo" data-action="enter" data-role="org"><div class="top"><span class="icon">${I.building}</span><h3>I'm an organisation</h3></div><p>Post a project and get an instant ranked shortlist of compatible schools — shown as anonymised candidates with how many students are interested and could be released.</p><span class="go">Open the organisation console ${I.arrow}</span></button>
+      <button class="role-card student" data-action="enter" data-role="moe"><div class="top"><span class="icon">${I.school}</span><h3>I'm an MOE administrator</h3></div><p>See every school's persona and logistics, browse which schools lean toward which sector, and forward incoming projects to the right school for its decision.</p><span class="go">Open the MOE console ${I.arrow}</span></button>
+    </div></section>
+    <section><p class="eyebrow" style="margin-bottom:12px">How it works</p><div class="how">
+      <div class="step"><span class="n">Persona</span><h3>Schools are profiled, not students</h3><p>Each school's MySkillsFuture export is aggregated into a persona: the top 3 sectors by share of students, plus releasable headcount, VIA hours budget, supervisors and exam blackouts.</p></div>
+      <div class="step"><span class="n">Match</span><h3>Instant on submission</h3><p>When an organisation posts a project, every school is scored on interest fit (50%), capacity vs. slots (20%), supervision (15%) and calendar clashes (15%). The organisation sees ranked candidates without names or locations.</p></div>
+      <div class="step"><span class="n">Forward</span><h3>MOE routes it to the school</h3><p>MOE sees the full picture, forwards the project to the best school, and records the school's decision. The organisation learns the school's identity only once it accepts.</p></div>
+    </div></section></div>`;
+}
+function navBtn(view,label,icon,count){ return `<button class="navbtn" data-action="view" data-view="${view}" aria-current="${S.view===view||(view==='projects'&&S.view==='project')||(view==='schools'&&S.view==='school')?'page':'false'}">${icon}<span>${label}</span>${count!=null?`<span class="count">${count}</span>`:''}</button>`; }
+function orgNav(){ const org=ORG[S.orgId]; const mine=S.projects.filter(p=>p.orgId===S.orgId);
+  return `<div class="who"><div class="name">${h(org.name)}</div><div class="sub">${org.type==='npo'?'Non-profit':'Industry partner'} · ${org.region}</div></div>`+navBtn('projects','Projects',I.grid,mine.length)+navBtn('new','Post a project',I.plus); }
+function moeNav(){ const q=S.projects.filter(p=>p.status==='sent').length;
+  return `<div class="who"><div class="name">MOE admin</div><div class="sub">Student Development Curriculum · VIA</div></div>`+navBtn('overview','Overview',I.grid)+navBtn('queue','Match queue',I.inbox,q||null)+navBtn('schools','Schools',I.school,SCHOOLS.length)+navBtn('map','Interest map',I.map); }
+function orgSwitcher(){ return `<label class="row small muted" style="gap:8px">Viewing as <select class="input" id="org-sel" data-fid="org-sel" data-change="org" style="width:auto">${ORGS.map(o=>`<option value="${o.id}" ${o.id===S.orgId?'selected':''}>${h(o.name)}</option>`).join('')}</select></label>`; }
+function sectorPills(ids){ return ids.map(s=>`<span class="pill accent">${SEC[s].emoji} ${h(SEC[s].name)}</span>`).join(''); }
+function stepper(p){
+  const steps=['Posted','Matched','Sent to MOE','Forwarded to school','School decision'];
+  const idx={matched:1,sent:2,forwarded:3,accepted:4,declined:4}[p.status];
+  return `<div class="stepper">${steps.map((s,i)=>`${i?`<span class="ln ${i<=idx?'done':''}"></span>`:''}<span class="st ${i<idx?'done':i===idx?'now':''}"><i>${i<idx?'✓':i+1}</i>${s}</span>`).join('')}</div>`;
+}
+function bd(k,v){ return `<div class="bd"><div class="k"><span>${k}</span><b>${v}</b></div><div class="t"><div class="f" style="width:${v}%"></div></div></div>`; }
+function flags(list){ return `<div class="reasons">${list.map(f=>`<span class="flag ${f.k}">${f.k==='ok'?I.check:''}${h(f.t)}</span>`).join('')}</div>`; }
+
+/* =====================================================================
+   ORGANISATION CONSOLE
+   ===================================================================== */
+function vProjects(){
+  const org=ORG[S.orgId], mine=S.projects.filter(p=>p.orgId===S.orgId).sort((a,b)=>b.createdAt.localeCompare(a.createdAt));
+  const accepted=mine.filter(p=>p.status==='accepted').length, waiting=mine.filter(p=>['sent','forwarded'].includes(p.status)).length;
+  return `<div class="page-head"><div><h1>${h(org.name)}</h1><p class="lede">${h(org.blurb)}</p></div>${orgSwitcher()}</div>
+  <div class="tiles">
+    <div class="tile"><div class="k">Projects posted</div><div class="v">${mine.length}</div><div class="s">${mine.reduce((n,p)=>n+p.slots,0)} student slots in total</div></div>
+    <div class="tile"><div class="k">Accepted by a school</div><div class="v">${accepted}</div><div class="s">${mine.filter(p=>p.status==='accepted').reduce((n,p)=>n+p.slots,0)} slots confirmed</div></div>
+    <div class="tile"><div class="k">With MOE / schools</div><div class="v">${waiting}</div><div class="s">awaiting a decision</div></div>
+    <div class="tile"><div class="k">Schools scanned per project</div><div class="v">${SCHOOLS.length}</div><div class="s">matched instantly on submission</div></div>
+  </div>
+  <section class="card"><div class="row between" style="margin-bottom:10px"><p class="eyebrow">Your projects</p><button class="btn sm primary" data-action="view" data-view="new">${I.plus} Post a project</button></div>
+    ${mine.length?`<div class="tbl-wrap"><table><thead><tr><th>Project</th><th>Sector</th><th class="num">Slots</th><th>Best candidate</th><th>Status</th><th></th></tr></thead><tbody>
+    ${mine.map(p=>{ const top=shortlist(p)[0]; return `<tr><td><b>${h(p.title)}</b><div class="small muted">${fmtRange(p.start,p.end)} · ${p.hours} h/student</div></td><td>${p.sectors.map(s=>SEC[s].emoji+' '+SEC[s].name).join(', ')}</td><td class="num">${p.slots}</td><td><span class="num">${top.m.score}</span> <span class="small muted">fit · ${top.m.potential} potential students</span></td><td><span class="status ${p.status}">${STATUS[p.status]}</span></td><td style="text-align:right"><button class="btn sm" data-action="open-project" data-id="${p.id}">Open</button></td></tr>`; }).join('')}
+    </tbody></table></div>`:`<div class="empty"><h3>No projects yet</h3><p>Post one and it is matched against every school immediately.</p></div>`}
+  </section>`;
+}
+function draft(){ if(!S.draft) S.draft={title:'',blurb:'',sectors:[],slots:30,hours:12,start:'2026-11-23',end:'2026-12-11',firstAid:false,region:ORG[S.orgId].region,errors:{}}; return S.draft; }
+function vNew(){
+  const d=draft(), e=d.errors||{};
+  return `<div class="page-head"><div><h1>Post a project</h1><p class="lede">Describe the project and tag its MySkillsFuture sector. The moment you publish, every school is scored and you get a ranked, anonymised shortlist.</p></div>${orgSwitcher()}</div>
+  <section class="card stack">
+    <div class="grid two">
+      <label class="field">Project title<input class="input" id="d-title" data-fid="d-title" data-draft="title" value="${h(d.title)}" placeholder="e.g. Coastal clean-up & marine survey" aria-invalid="${!!e.title}">${e.title?`<span class="err">${e.title}</span>`:''}</label>
+      <label class="field">Venue region <span class="hint">used by MOE for proximity; never shown to schools as your identity</span><select class="input" id="d-region" data-fid="d-region" data-draft="region">${REGIONS.map(r=>`<option ${d.region===r?'selected':''}>${r}</option>`).join('')}</select></label>
+    </div>
+    <label class="field">What students will do<textarea class="input" id="d-blurb" data-fid="d-blurb" data-draft="blurb" aria-invalid="${!!e.blurb}">${h(d.blurb)}</textarea>${e.blurb?`<span class="err">${e.blurb}</span>`:''}</label>
+    <p class="eyebrow">Sector (MySkillsFuture) <span class="hint" style="font-weight:400;text-transform:none;letter-spacing:0">— primary first, optional secondary</span></p>${e.sectors?`<p class="err">${e.sectors}</p>`:''}
+    <div class="chips">${SECTORS.map(s=>`<button type="button" class="chip" data-fid="ds-${s.id}" data-action="toggle-sector" data-id="${s.id}" aria-pressed="${d.sectors.includes(s.id)}">${s.emoji} ${h(s.name)}${d.sectors[0]===s.id?'<span class="sec">primary</span>':d.sectors[1]===s.id?'<span class="sec">secondary</span>':''}</button>`).join('')}</div>
+    <div class="grid four">
+      <label class="field">Student slots<input class="input" type="number" min="1" id="d-slots" data-fid="d-slots" data-draft="slots" value="${d.slots}" aria-invalid="${!!e.slots}">${e.slots?`<span class="err">${e.slots}</span>`:''}</label>
+      <label class="field">VIA hours per student<input class="input" type="number" min="1" id="d-hours" data-fid="d-hours" data-draft="hours" value="${d.hours}"></label>
+      <label class="field">Start<input class="input" type="date" id="d-start" data-fid="d-start" data-draft="start" value="${d.start}" aria-invalid="${!!e.dates}"></label>
+      <label class="field">End<input class="input" type="date" id="d-end" data-fid="d-end" data-draft="end" value="${d.end}" aria-invalid="${!!e.dates}">${e.dates?`<span class="err">${e.dates}</span>`:''}</label>
+    </div>
+    <label class="row" style="cursor:pointer;gap:10px"><input type="checkbox" id="d-fa" data-fid="d-fa" data-draft="firstAid" ${d.firstAid?'checked':''}> <span>Requires a first-aid trained teacher on site</span></label>
+    ${preview(d)}
+    <div class="wiz-foot"><button class="btn ghost" data-action="draft-clear">Clear form</button><button class="btn primary" data-action="draft-submit">Publish &amp; match now ${I.arrow}</button></div>
+  </section>`;
+}
+function preview(d){
+  if(!d.sectors.length||!d.start||!d.end||d.end<d.start) return `<div class="card tight small muted" style="background:var(--surface-2);border:0">Pick a sector and valid dates to preview your reach.</div>`;
+  const fake={...d, slots:+d.slots||1, hours:+d.hours||1};
+  const sl=shortlist(fake);
+  const strong=sl.filter(x=>x.m.score>=70).length, fill=sl.filter(x=>x.m.potential>=fake.slots).length;
+  return `<div class="card tight" style="background:var(--accent-soft);border:0"><p class="eyebrow" style="color:var(--accent-ink)">Live reach preview · ${SCHOOLS.length} schools scanned</p>
+    <div class="row" style="gap:22px;margin-top:6px"><span><b class="num" style="font-size:1.2rem">${strong}</b> <span class="small">schools score 70+</span></span><span><b class="num" style="font-size:1.2rem">${fill}</b> <span class="small">can fill all ${fake.slots} slots</span></span><span><b class="num" style="font-size:1.2rem">${sl[0].m.interested}</b> <span class="small">students interested at the best candidate (${pct(sl[0].m.pct)} of its cohort)</span></span></div></div>`;
+}
+function validateDraft(){ const d=draft(), e={};
+  if(!d.title.trim()) e.title='Give the project a title.'; if(!d.blurb.trim()) e.blurb='Describe the work in a sentence or two.';
+  if(!d.sectors.length) e.sectors='Choose a primary sector — this drives the match.'; if(!(+d.slots>0)) e.slots='Enter how many students you need.';
+  if(!d.start||!d.end||d.end<d.start) e.dates='End date must be on or after the start date.'; d.errors=e; return !Object.keys(e).length; }
+
+function candidateCard(x, letter, best, p){
+  const m=x.m;
+  const safeFlags=m.flags.filter(f=>!/Same region/.test(f.t)); // never leak location to the organisation
+  return `<article class="card cand ${best?'best':''}">${ring(m.score)}<div>
+    <div class="row between"><div class="row"><span class="rank">Candidate ${letter}</span>${best?`<span class="pill saffron">Best match</span>`:''}</div><span class="anon">${I.lock} School identity withheld until acceptance</span></div>
+    <div class="nums">
+      <div><div class="k">Students interested</div><div class="v">${m.interested}</div><div class="s">${pct(m.pct)} of cohort</div></div>
+      <div><div class="k">Potential match</div><div class="v">${m.potential}</div><div class="s">interested &amp; releasable</div></div>
+      <div><div class="k">Fills your slots</div><div class="v">${Math.min(100,Math.round(m.potential/p.slots*100))}%</div><div class="s">of ${p.slots} needed</div></div>
+      <div><div class="k">Calendar clear</div><div class="v">${m.parts.calendar}%</div><div class="s">of project days</div></div>
+    </div>${flags(safeFlags)}</div></article>`;
+}
+function vProject(){
+  const p=projById(S.openProject); if(!p){ S.view='projects'; return vProjects(); }
+  const sl=shortlist(p), n=p.sentTo||5, top=sl.slice(0,5);
+  const school=p.forwardedTo?SCHOOL[p.forwardedTo]:null;
+  let action='';
+  if(p.status==='matched') action=`<div class="row"><button class="btn primary" data-action="send-moe" data-id="${p.id}" data-n="3">${I.send} Send top 3 to MOE</button><button class="btn" data-action="send-moe" data-id="${p.id}" data-n="5">Send all 5</button><span class="small muted">MOE sees names and forwards to one school.</span></div>`;
+  else if(p.status==='sent') action=`<div class="flag warn">${I.clock} With MOE — top ${n} candidates sent. Awaiting forwarding to a school.</div>`;
+  else if(p.status==='forwarded') action=`<div class="flag info">${I.clock} MOE forwarded your project to a school on ${fmtDate(p.forwardedAt)}. Awaiting the school's decision.</div>`;
+  else if(p.status==='accepted') action=`<div class="card tight" style="background:var(--good-soft);border:0"><p class="eyebrow" style="color:var(--good)">Accepted · identity released</p><h3 style="margin-top:4px">${h(school.name)}</h3><p class="small">${school.region} · ${matchSchool(p,school).potential} interested students releasable · VIA coordinator will contact you to schedule.</p></div>`;
+  else if(p.status==='declined') action=`<div class="card tight" style="background:var(--crit-soft);border:0"><p class="eyebrow" style="color:var(--crit)">Declined by the forwarded school</p><p class="small" style="margin-top:4px">Reason given: ${h(p.declineReason||'not stated')}. MOE can forward to the next candidate.</p><button class="btn sm" style="margin-top:8px" data-action="resend" data-id="${p.id}">Ask MOE to try the next candidate</button></div>`;
+  return `<button class="btn ghost sm" data-action="view" data-view="projects" style="align-self:flex-start">${I.back} All projects</button>
+  <div class="page-head"><div><h1>${h(p.title)}</h1><p class="lede">${h(p.blurb)}</p></div><span class="status ${p.status}">${STATUS[p.status]}</span></div>
+  <section class="card stack">${stepper(p)}<div class="divider"></div>
+    <div class="row" style="gap:6px 16px"><span class="row" style="gap:6px">${sectorPills(p.sectors)}</span><span class="small muted">${I.users} ${p.slots} slots</span><span class="small muted">${I.clock} ${p.hours} h/student</span><span class="small muted">${I.cal} ${fmtRange(p.start,p.end)}</span>${p.firstAid?`<span class="small muted">First aid required</span>`:''}</div>
+    ${action}</section>
+  <div class="row between"><div><h2>Ranked shortlist</h2><p class="muted small">Matched instantly against ${SCHOOLS.length} schools. ${p.status==='matched'?'Names and locations stay hidden; you see only how many students want this.':'Top '+n+' were sent to MOE.'}</p></div></div>
+  ${top.map((x,i)=>candidateCard(x,'ABCDE'[i],i===0,p)).join('')}
+  <details class="explain"><summary>How is compatibility scored?</summary><div class="body"><p>Every school's MySkillsFuture export is aggregated into interest counts per sector. Your project is scored against each school:</p>
+    <div class="formula"><div>Interest fit<b>× 0.50</b></div><div>Capacity<b>× 0.20</b></div><div>Supervision<b>× 0.15</b></div><div>Calendar<b>× 0.15</b></div></div>
+    <p><code>interest</code> = share of the cohort interested in your sector (55%+ = full marks; a secondary sector counts half). <code>capacity</code> = students both interested and releasable this term, full marks at 2× your slots so the school can absorb drop-outs; discounted if the school's VIA hours budget is below your hours. <code>supervision</code> = teachers available ÷ 1 per 15 students, discounted if first aid is required but unavailable. <code>calendar</code> = share of your project days free of that school's exams and events.</p></div></details>`;
+}
+
+/* =====================================================================
+   MOE CONSOLE
+   ===================================================================== */
+function vOverview(){
+  const queue=S.projects.filter(p=>p.status==='sent'), fwd=S.projects.filter(p=>p.status==='forwarded');
+  const decided=S.projects.filter(p=>['accepted','declined'].includes(p.status)), acc=decided.filter(p=>p.status==='accepted').length;
+  const totals=SECTORS.map(s=>({s, n:SCHOOLS.reduce((n,x)=>n+x.interest[s.id],0)})).sort((a,b)=>b.n-a.n); const mx=totals[0].n;
+  const students=SCHOOLS.reduce((n,s)=>n+s.cohort,0);
+  return `<div class="page-head"><div><h1>MOE overview</h1><p class="lede">School personas from the MySkillsFuture export, and every organisation project waiting to be routed to a school.</p></div><span class="pill">Export loaded 12 Sep 2026</span></div>
+  <div class="tiles">
+    <div class="tile"><div class="k">Schools profiled</div><div class="v">${SCHOOLS.length}<span class="muted" style="font-size:1rem">/118</span></div><div class="s">${students.toLocaleString('en-SG')} student interest records</div></div>
+    <div class="tile"><div class="k">Awaiting forwarding</div><div class="v" style="color:var(--saffron-ink)">${queue.length}</div><div class="s">${queue.reduce((n,p)=>n+p.slots,0)} slots to place</div></div>
+    <div class="tile"><div class="k">With schools</div><div class="v">${fwd.length}</div><div class="s">forwarded, decision pending</div></div>
+    <div class="tile"><div class="k">Acceptance rate</div><div class="v">${decided.length?Math.round(acc/decided.length*100)+'%':'–'}</div><div class="s">${acc} of ${decided.length} decided</div></div>
+  </div>
+  <div class="grid two">
+    <section class="card"><div class="row between" style="margin-bottom:10px"><p class="eyebrow">Needs forwarding</p><button class="btn sm" data-action="view" data-view="queue">Open queue</button></div>
+      ${queue.length?`<div class="stack" style="gap:8px">${queue.map(p=>{ const t=shortlist(p)[0]; return `<div class="row between" style="padding:8px 0;border-bottom:1px solid var(--line)"><div><b>${h(p.title)}</b><div class="small muted">${h(ORG[p.orgId].name)} · ${p.slots} slots · ${fmtRange(p.start,p.end)}</div></div><div class="small" style="text-align:right"><b>${h(t.s.name)}</b><div class="muted">${t.m.score} fit · ${t.m.potential} students</div></div></div>`; }).join('')}</div>`:`<p class="muted small">Queue is clear.</p>`}
+    </section>
+    <section class="card"><p class="eyebrow" style="margin-bottom:10px">Network interest by sector</p>
+      <div class="stack" style="gap:7px">${totals.slice(0,8).map(t=>`<div class="persona"><div class="p"><div><div class="small">${t.s.emoji} ${h(t.s.name)}</div><div class="t"><div class="f" style="width:${Math.round(t.n/mx*100)}%"></div></div></div><span class="pct">${(t.n/1000).toFixed(1)}k</span></div></div>`).join('')}</div>
+      <p class="small faint" style="margin-top:8px">Students may record more than one interest. <button class="btn ghost sm" data-action="view" data-view="map">See by school</button></p>
+    </section>
+  </div>`;
+}
+
+function vSchools(){
+  const f=S.schoolFilter;
+  let list=SCHOOLS.map(s=>({s, per:persona(s)}));
+  if(f.sector!=='all') list=list.filter(x=>x.per.some(p=>p.id===f.sector));
+  if(f.region!=='all') list=list.filter(x=>x.s.region===f.region);
+  if(f.q) list=list.filter(x=>x.s.name.toLowerCase().includes(f.q.toLowerCase()));
+  if(f.sector!=='all') list.sort((a,b)=>b.s.interest[f.sector]/b.s.cohort - a.s.interest[f.sector]/a.s.cohort); else list.sort((a,b)=>a.s.name.localeCompare(b.s.name));
+  return `<div class="page-head"><div><h1>Schools</h1><p class="lede">Each school's persona is its top 3 MySkillsFuture sectors by share of students, alongside what it can logistically support this term.</p></div></div>
+  <div class="card tight filters">
+    <input class="input" style="width:220px" id="sf-q" data-fid="sf-q" data-sfilter="q" placeholder="Search school" value="${h(f.q)}" aria-label="Search school">
+    <select class="input" id="sf-sector" data-fid="sf-sector" data-sfilter="sector"><option value="all">Any persona sector</option>${SECTORS.map(s=>`<option value="${s.id}" ${f.sector===s.id?'selected':''}>${s.emoji} ${h(s.name)}</option>`).join('')}</select>
+    <select class="input" id="sf-region" data-fid="sf-region" data-sfilter="region"><option value="all">All regions</option>${REGIONS.map(r=>`<option ${f.region===r?'selected':''}>${r}</option>`).join('')}</select>
+    <span class="small muted">${plural(list.length,'school')}${f.sector!=='all'?' with '+SEC[f.sector].name+' in their top 3':''}</span></div>
+  ${list.length?`<div class="grid three">${list.map(x=>schoolCard(x.s,x.per)).join('')}</div>`:`<div class="empty"><h3>No schools match</h3><p>Clear a filter to widen the list.</p></div>`}`;
+}
+function schoolCard(s,per){
+  return `<button class="school" data-action="open-school" data-id="${s.id}"><div class="row between"><div><h3>${h(s.name)}</h3><div class="small muted">${s.type==='jc'?'Junior College':'Secondary'} · ${s.region} · ${s.cohort.toLocaleString('en-SG')} records</div></div></div>
+    <div class="persona">${per.map(p=>`<div class="p"><div><div class="small">${SEC[p.id].emoji} ${h(SEC[p.id].name)}</div><div class="t"><div class="f" style="width:${Math.round(p.pct/0.55*100)}%"></div></div></div><span class="pct">${pct(p.pct)}</span></div>`).join('')}</div>
+    <div class="row small muted" style="gap:12px"><span>${I.users} ${s.releasable} releasable</span><span>${I.clock} ${s.hoursBudget} h budget</span><span>${s.supervisors} supervisors</span></div></button>`;
+}
+function vSchool(){
+  const s=SCHOOL[S.openSchool]; if(!s){ S.view='schools'; return vSchools(); }
+  const dist=SECTORS.map(x=>({x, n:s.interest[x.id], p:s.interest[x.id]/s.cohort})).sort((a,b)=>b.n-a.n);
+  const involved=S.projects.filter(p=>p.forwardedTo===s.id);
+  return `<button class="btn ghost sm" data-action="view" data-view="schools" style="align-self:flex-start">${I.back} All schools</button>
+  <div class="page-head"><div><h1>${h(s.name)}</h1><p class="lede">${s.type==='jc'?'Junior College':'Secondary school'} · ${s.region} region · ${s.enrol.toLocaleString('en-SG')} enrolled, ${s.cohort.toLocaleString('en-SG')} with MySkillsFuture interest records (${pct(s.cohort/s.enrol)})</p></div><span class="pill">Export ${fmtDate(s.updated)} 2026</span></div>
+  <div class="grid two">
+    <section class="card stack"><p class="eyebrow">Persona · top 3 sectors</p><div class="row" style="gap:6px">${persona(s).map(p=>`<span class="pill accent">${SEC[p.id].emoji} ${h(SEC[p.id].name)} · ${pct(p.pct)}</span>`).join('')}</div>
+      <div class="divider"></div><p class="eyebrow">Full interest distribution</p>
+      <div class="stack" style="gap:6px">${dist.map(d=>`<div class="persona"><div class="p"><div><div class="small">${d.x.emoji} ${h(d.x.name)} <span class="faint">· ${d.n}</span></div><div class="t"><div class="f" style="width:${Math.round(d.p/0.55*100)}%"></div></div></div><span class="pct">${pct(d.p)}</span></div></div>`).join('')}</div></section>
+    <div class="stack">
+      <section class="card stack"><p class="eyebrow">Logistics capability</p>
+        <dl class="klist"><dt>Releasable this term</dt><dd>${s.releasable} students (${pct(s.releasable/s.cohort)} of cohort)</dd><dt>VIA hours budget</dt><dd>${s.hoursBudget} h per student</dd><dt>Teacher supervisors</dt><dd>${s.supervisors} available · ${s.firstAid} first-aid trained</dd><dt>Supervision capacity</dt><dd>≈ ${s.supervisors*STUDENTS_PER_SUPERVISOR} students at 1 : ${STUDENTS_PER_SUPERVISOR}</dd></dl></section>
+      <section class="card stack"><p class="eyebrow">Blackout dates</p>${s.blackouts.map(b=>`<div class="row between small"><span>${h(b.label)}</span><span class="muted num" style="font-weight:500">${fmtRange(b.from,b.to)}</span></div>`).join('')}</section>
+      <section class="card stack"><p class="eyebrow">Projects routed here</p>${involved.length?involved.map(p=>`<div class="row between small"><span><b>${h(p.title)}</b> <span class="muted">· ${h(ORG[p.orgId].name)}</span></span><span class="status ${p.status}">${STATUS[p.status]}</span></div>`).join(''):`<p class="small muted">None yet.</p>`}</section>
+    </div></div>`;
+}
+
+function vMap(){
+  const sec=SEC[S.mapSector]?S.mapSector:'env';
+  const ranked=SCHOOLS.map(s=>({s, n:s.interest[sec], p:s.interest[sec]/s.cohort, inPersona:persona(s).some(x=>x.id===sec)})).sort((a,b)=>b.n-a.n);
+  const mx=ranked[0].n;
+  const heatRows=SCHOOLS.slice().sort((a,b)=>a.name.localeCompare(b.name));
+  return `<div class="page-head"><div><h1>Interest map</h1><p class="lede">Schools categorised by how many of their students recorded an interest in a sector — the raw material behind every match.</p></div>
+    <label class="row small muted" style="gap:8px">Sector <select class="input" id="map-sel" data-fid="map-sel" data-change="mapSector" style="width:auto">${SECTORS.map(s=>`<option value="${s.id}" ${sec===s.id?'selected':''}>${s.emoji} ${h(s.name)}</option>`).join('')}</select></label></div>
+  <section class="card tight tbl-wrap"><table><thead><tr><th>#</th><th>School</th><th>Region</th><th class="num">Students interested</th><th style="width:30%">Share of cohort</th><th>In persona</th></tr></thead><tbody>
+    ${ranked.map((r,i)=>`<tr><td class="num muted">${i+1}</td><td><button class="btn ghost sm" style="padding:2px 6px;margin-left:-6px" data-action="open-school" data-id="${r.s.id}">${h(r.s.name)}</button></td><td class="small muted">${r.s.region}</td><td class="num">${r.n}</td><td><div class="row" style="gap:8px;flex-wrap:nowrap"><div class="bar" style="flex:1"><div class="f" style="width:${Math.round(r.n/mx*100)}%"></div></div><span class="num small">${pct(r.p)}</span></div></td><td>${r.inPersona?`<span class="pill accent">Top 3</span>`:'<span class="small faint">—</span>'}</td></tr>`).join('')}
+  </tbody></table></section>
+  <section class="card"><div class="row between" style="margin-bottom:8px"><p class="eyebrow">Network heat map · share of cohort per sector</p><span class="legend"><i style="background:var(--surface-2)"></i>0%<i style="background:color-mix(in srgb,var(--accent) 45%,var(--surface-2))"></i>28%<i style="background:var(--accent)"></i>55%+</span></div>
+    <div class="heat"><table><thead><tr><th>School</th>${SECTORS.map(s=>`<th title="${h(s.name)}" style="text-align:center">${s.emoji}</th>`).join('')}</tr></thead><tbody>
+    ${heatRows.map(s=>`<tr><td class="small" style="white-space:nowrap">${h(s.name)}</td>${SECTORS.map(x=>{ const p=s.interest[x.id]/s.cohort; return `<td class="c"><span style="${heatColor(p)}">${Math.round(p*100)}</span></td>`; }).join('')}</tr>`).join('')}
+    </tbody></table></div></section>`;
+}
+
+function vQueue(){
+  const qf=S.queueFilter;
+  let list=S.projects.filter(p=>p.status!=='matched');
+  if(qf==='sent') list=list.filter(p=>p.status==='sent'); else if(qf==='forwarded') list=list.filter(p=>p.status==='forwarded'); else if(qf==='decided') list=list.filter(p=>['accepted','declined'].includes(p.status));
+  list.sort((a,b)=>b.createdAt.localeCompare(a.createdAt));
+  const tab=(k,l,n)=>`<button class="chip" data-action="qfilter" data-id="${k}" aria-pressed="${qf===k}">${l}${n!=null?` <span class="sec">${n}</span>`:''}</button>`;
+  const counts={sent:S.projects.filter(p=>p.status==='sent').length, forwarded:S.projects.filter(p=>p.status==='forwarded').length, decided:S.projects.filter(p=>['accepted','declined'].includes(p.status)).length};
+  return `<div class="page-head"><div><h1>Match queue</h1><p class="lede">Projects organisations have sent in, each with its ranked schools. Forward one to the best school, then record the school's reply.</p></div></div>
+  <div class="chips">${tab('sent','Needs forwarding',counts.sent)}${tab('forwarded','With schools',counts.forwarded)}${tab('decided','Decided',counts.decided)}${tab('all','All')}</div>
+  ${list.length?list.map(queueCard).join(''):`<div class="empty"><h3>Nothing here</h3><p>Projects appear once an organisation sends its shortlist to MOE.</p></div>`}`;
+}
+function queueCard(p){
+  const org=ORG[p.orgId], sl=shortlist(p).slice(0, p.sentTo||5);
+  const tried=p.tried||[];
+  let body='';
+  if(p.status==='sent'){
+    body=`<div class="tbl-wrap"><table><thead><tr><th>Rank</th><th>School</th><th class="num">Fit</th><th>Breakdown</th><th class="num">Potential</th><th>Notes</th><th></th></tr></thead><tbody>
+      ${sl.map((x,i)=>`<tr ${tried.includes(x.s.id)?'style="opacity:.55"':''}><td class="num muted">${i+1}</td><td><b>${h(x.s.name)}</b><div class="small muted">${x.s.region} · ${x.m.interested} interested (${pct(x.m.pct)})</div></td><td class="num" style="font-size:1.05rem">${x.m.score}</td>
+        <td style="min-width:200px"><div class="breakdown" style="margin:0;gap:6px 12px;grid-template-columns:repeat(2,minmax(0,1fr))">${bd('Interest',x.m.parts.interest)}${bd('Capacity',x.m.parts.capacity)}${bd('Supervision',x.m.parts.supervision)}${bd('Calendar',x.m.parts.calendar)}</div></td>
+        <td class="num">${x.m.potential}<div class="small muted">of ${p.slots}</div></td><td>${flags(x.m.flags.filter(f=>f.k!=='ok').slice(0,2))}${tried.includes(x.s.id)?`<span class="flag bad">Declined earlier</span>`:''}</td>
+        <td style="text-align:right;white-space:nowrap">${tried.includes(x.s.id)?'':`<button class="btn sm ${i===0?'primary':''}" data-action="forward" data-id="${p.id}" data-school="${x.s.id}">Forward</button>`}</td></tr>`).join('')}
+    </tbody></table></div>`;
+  } else {
+    const s=SCHOOL[p.forwardedTo], m=matchSchool(p,s);
+    body=`<div class="row between" style="gap:12px"><div><div class="small muted">Forwarded ${fmtDate(p.forwardedAt)} to</div><h3>${h(s.name)}</h3><div class="small muted">${m.score} fit · ${m.potential} potential students for ${p.slots} slots · ${s.region}</div></div>
+      ${p.status==='forwarded'?`<div class="row"><span class="small muted">Record the school's reply:</span><button class="btn sm primary" data-action="decide" data-id="${p.id}" data-d="accepted">${I.check} Accepted</button><button class="btn sm" data-action="decide" data-id="${p.id}" data-d="declined">Declined</button></div>`
+        :p.status==='accepted'?`<span class="status accepted">Accepted ${fmtDate(p.decidedAt)}</span>`:`<div class="row"><span class="status declined">Declined ${fmtDate(p.decidedAt)}</span><span class="small muted">${h(p.declineReason||'')}</span><button class="btn sm" data-action="resend" data-id="${p.id}">Forward to next</button></div>`}</div>`;
+  }
+  return `<article class="card stack"><div class="row between"><div><h2 style="font-size:1.2rem">${h(p.title)}</h2><p class="small muted">${h(org.name)} · ${org.type==='npo'?'Non-profit':'Industry'} · posted ${fmtDate(p.createdAt)}</p></div><span class="status ${p.status}">${STATUS[p.status]}</span></div>
+    <div class="row" style="gap:6px 16px">${sectorPills(p.sectors)}<span class="small muted">${I.users} ${p.slots} slots</span><span class="small muted">${I.clock} ${p.hours} h/student</span><span class="small muted">${I.cal} ${fmtRange(p.start,p.end)}</span><span class="small muted">${I.pin} ${p.region}</span>${p.firstAid?`<span class="small muted">First aid required</span>`:''}</div>
+    <p class="small" style="max-width:80ch">${h(p.blurb)}</p>${body}</article>`;
+}
+
+/* =====================================================================
+   Events
+   ===================================================================== */
+document.addEventListener('click', ev=>{
+  const el=ev.target.closest('[data-action]'); if(!el) return; const a=el.dataset.action, id=el.dataset.id;
+  switch(a){
+    case 'home': S.role=null; S.view=null; render(); window.scrollTo(0,0); break;
+    case 'enter': case 'role': S.role=el.dataset.role; S.view=null; render(); window.scrollTo(0,0); break;
+    case 'reset': resetDemo(); break;
+    case 'view': S.view=el.dataset.view; render(); window.scrollTo(0,0); break;
+    case 'open-project': S.openProject=id; S.view='project'; render(); window.scrollTo(0,0); break;
+    case 'open-school': S.role='moe'; S.openSchool=id; S.view='school'; render(); window.scrollTo(0,0); break;
+    case 'toggle-sector': { const d=draft(); const i=d.sectors.indexOf(id); if(i>=0) d.sectors.splice(i,1); else { if(d.sectors.length>=2){ toast('Choose at most two sectors — remove one first'); return; } d.sectors.push(id); } render(); break; }
+    case 'draft-clear': S.draft=null; render(); break;
+    case 'draft-submit': if(validateDraft()){ const d=draft(); const p={id:'pr'+Date.now(), orgId:S.orgId, title:d.title.trim(), blurb:d.blurb.trim(), sectors:[...d.sectors], slots:+d.slots, hours:+d.hours||1, start:d.start, end:d.end, firstAid:!!d.firstAid, region:d.region, createdAt:today, status:'matched', sentTo:0}; S.projects.push(p); S.draft=null; S.openProject=p.id; S.view='project'; toast('Matched against '+SCHOOLS.length+' schools in '+(2+Math.floor(Math.random()*4))+' ms'); } render(); window.scrollTo(0,0); break;
+    case 'send-moe': { const p=projById(id); p.status='sent'; p.sentTo=+el.dataset.n; p.sentAt=today; toast('Sent to MOE — top '+p.sentTo+' candidates'); render(); break; }
+    case 'forward': { const p=projById(id); p.status='forwarded'; p.forwardedTo=el.dataset.school; p.forwardedAt=today; toast('Forwarded to '+SCHOOL[p.forwardedTo].name+' for decision'); render(); break; }
+    case 'decide': { const p=projById(id); p.status=el.dataset.d; p.decidedAt=today; if(p.status==='declined'){ p.declineReason='Insufficient supervisors in that window'; p.tried=[...(p.tried||[]), p.forwardedTo]; toast('Recorded: declined — forward to the next candidate when ready'); } else toast('Recorded: accepted — '+ORG[p.orgId].name+' can now see the school'); render(); break; }
+    case 'resend': { const p=projById(id); p.tried=[...new Set([...(p.tried||[]), p.forwardedTo])]; p.status='sent'; p.forwardedTo=null; p.decidedAt=null; p.declineReason=null; if(S.role==='org') toast('MOE asked to forward to the next candidate'); render(); break; }
+    case 'qfilter': S.queueFilter=id; render(); break;
+  }
+});
+document.addEventListener('input', ev=>{ const el=ev.target;
+  if(el.dataset.draft){ const d=draft(); d[el.dataset.draft]= el.type==='checkbox'?el.checked : el.type==='number'?+el.value : el.value; save(); }
+  if(el.dataset.sfilter==='q'){ S.schoolFilter.q=el.value; render(); }
+});
+document.addEventListener('change', ev=>{ const el=ev.target;
+  if(el.dataset.draft && (el.tagName==='SELECT'||el.type==='date'||el.type==='number'||el.type==='checkbox')) render();
+  if(el.dataset.sfilter && el.dataset.sfilter!=='q'){ S.schoolFilter[el.dataset.sfilter]=el.value; render(); }
+  if(el.dataset.change==='org'){ S.orgId=el.value; S.draft=null; S.view='projects'; render(); }
+  if(el.dataset.change==='mapSector'){ S.mapSector=el.value; render(); }
+});
+render();
+</script>
