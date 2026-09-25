@@ -1,46 +1,22 @@
 <title>SparkVIA</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap">
 <style>
 :root{
-  --ground:#F3F6F8; --surface:#FFFFFF; --surface-2:#EAF0F4; --line:#D7E0E8; --line-strong:#B9C7D3;
-  --ink:#13202B; --muted:#5C6E7E; --faint:#8A9BAA;
-  --student:#0F4C81; --student-soft:#E3EEF8; --student-ink:#0B3A63;
-  --npo:#0E6B5C; --npo-soft:#DFF1EC; --npo-ink:#0A5044;
-  --saffron:#E8930C; --saffron-soft:#FCEFD9; --saffron-ink:#8A5300;
-  --good:#1F8A4C; --good-soft:#DFF3E6; --warn:#B96A12; --warn-soft:#FBEBD6; --crit:#C43D3D; --crit-soft:#F9E1E1;
-  --shadow:0 1px 2px rgba(19,32,43,.06), 0 8px 24px -12px rgba(19,32,43,.18);
-  --focus:0 0 0 3px rgba(15,76,129,.35);
-  --r-sm:8px; --r-md:12px; --r-lg:18px;
-  --font-display:"Bricolage Grotesque","Instrument Sans",system-ui,sans-serif;
-  --font-body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --ground:#F5F7FA; --surface:#FFFFFF; --surface-2:#EEF2F6; --line:#DDE3EA; --line-strong:#C3CDD8;
+  --ink:#0F1B2D; --muted:#55657A; --faint:#66768A;
+  --student:#1B3A6B; --student-soft:#E6ECF5; --student-ink:#14294D;
+  --npo:#0F6B60; --npo-soft:#E1F0EE; --npo-ink:#0A4F47;
+  --saffron:#B7791F; --saffron-soft:#F8EFDD; --saffron-ink:#7A4E0E;
+  --good:#1E7A45; --good-soft:#E0F1E7; --warn:#A65F0B; --warn-soft:#F8EBD6; --crit:#B33636; --crit-soft:#F7E2E2;
+  --shadow:0 1px 2px rgba(15,27,45,.06), 0 2px 8px -4px rgba(15,27,45,.10);
+  --focus:0 0 0 3px rgba(27,58,107,.35);
+  --r-sm:6px; --r-md:8px; --r-lg:12px;
+  --font-display:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --font-body:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
   --font-mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
   --accent:var(--student); --accent-soft:var(--student-soft); --accent-ink:var(--student-ink);
   color-scheme:light;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --ground:#0D141B; --surface:#16202A; --surface-2:#1D2933; --line:#27343F; --line-strong:#3A4A58;
-    --ink:#E7EEF4; --muted:#9DAFBE; --faint:#6F8291;
-    --student:#7FB3E6; --student-soft:#173149; --student-ink:#B9D6F2;
-    --npo:#5CC4AE; --npo-soft:#123A33; --npo-ink:#A9E4D6;
-    --saffron:#F2A83B; --saffron-soft:#3D2A0F; --saffron-ink:#F7C87C;
-    --good:#4CC57E; --good-soft:#153826; --warn:#E39A3F; --warn-soft:#3B2A12; --crit:#EE6B6B; --crit-soft:#3E1C1C;
-    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
-    --focus:0 0 0 3px rgba(127,179,230,.45);
-    color-scheme:dark;
-  }
-}
-:root[data-theme="dark"]{
-  --ground:#0D141B; --surface:#16202A; --surface-2:#1D2933; --line:#27343F; --line-strong:#3A4A58;
-  --ink:#E7EEF4; --muted:#9DAFBE; --faint:#6F8291;
-  --student:#7FB3E6; --student-soft:#173149; --student-ink:#B9D6F2;
-  --npo:#5CC4AE; --npo-soft:#123A33; --npo-ink:#A9E4D6;
-  --saffron:#F2A83B; --saffron-soft:#3D2A0F; --saffron-ink:#F7C87C;
-  --good:#4CC57E; --good-soft:#153826; --warn:#E39A3F; --warn-soft:#3B2A12; --crit:#EE6B6B; --crit-soft:#3E1C1C;
-  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
-  --focus:0 0 0 3px rgba(127,179,230,.45);
-  color-scheme:dark;
 }
 *{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
@@ -48,7 +24,7 @@ body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--font-b
 body[data-role="org"]{--accent:var(--npo);--accent-soft:var(--npo-soft);--accent-ink:var(--npo-ink)}
 body[data-role="moe"]{--accent:var(--student);--accent-soft:var(--student-soft);--accent-ink:var(--student-ink)}
 h1,h2,h3,h4{font-family:var(--font-display);margin:0;line-height:1.15;text-wrap:balance;letter-spacing:-.01em}
-h1{font-size:2rem;font-weight:700}
+h1{font-size:1.75rem;font-weight:650;letter-spacing:-.02em}
 h2{font-size:1.45rem;font-weight:650}
 h3{font-size:1.1rem;font-weight:650}
 p{margin:0}
@@ -60,23 +36,23 @@ button{cursor:pointer}
 .muted{color:var(--muted)}
 .faint{color:var(--faint)}
 .small{font-size:.86rem}
-.eyebrow{font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;font-weight:600;color:var(--muted)}
+.eyebrow{font-size:.75rem;text-transform:uppercase;letter-spacing:.09em;font-weight:600;color:var(--muted)}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
 /* ---------- top bar ---------- */
-.topbar{position:sticky;top:0;z-index:20;background:var(--surface);border-bottom:1px solid var(--line);}
+.topbar{position:sticky;top:0;z-index:20;background:var(--surface);border-bottom:1px solid var(--line);box-shadow:0 1px 0 rgba(15,27,45,.03)}
 .topbar-in{max-width:1240px;margin:0 auto;padding:0 20px;height:60px;display:flex;align-items:center;gap:16px}
 .brand{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:700;font-size:1.15rem;letter-spacing:-.01em;color:var(--ink);text-decoration:none;background:none;border:0;padding:0}
-.brand .mark{width:30px;height:30px;border-radius:9px;background:var(--accent);display:grid;place-items:center;color:#fff;flex:none}
+.brand .mark{width:28px;height:28px;border-radius:4px;background:var(--student);display:grid;place-items:center;color:#fff;flex:none;font-size:.95rem;font-weight:700}
 .brand .mark svg{width:18px;height:18px}
-.brand em{font-style:normal;color:var(--accent)}
+
 .topbar .spacer{flex:1}
-.seg{display:inline-flex;background:var(--surface-2);border:1px solid var(--line);border-radius:999px;padding:3px;gap:2px}
-.seg button{border:0;background:transparent;border-radius:999px;padding:6px 14px;font-weight:600;font-size:.86rem;color:var(--muted)}
+.seg{display:inline-flex;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;border-radius:6px;padding:6px 14px;min-height:44px;font-weight:600;font-size:.86rem;color:var(--muted)}
 .seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12)}
 .seg button.st[aria-pressed="true"]{color:var(--student)}
 .seg button.np[aria-pressed="true"]{color:var(--npo)}
-.pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:.78rem;font-weight:600;background:var(--surface-2);color:var(--muted);border:1px solid var(--line);white-space:nowrap}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:2px 8px;border-radius:4px;font-size:.78rem;font-weight:600;background:var(--surface-2);color:var(--muted);border:1px solid var(--line);white-space:nowrap}
 .pill.accent{background:var(--accent-soft);color:var(--accent-ink);border-color:transparent}
 .pill.saffron{background:var(--saffron-soft);color:var(--saffron-ink);border-color:transparent}
 .pill.good{background:var(--good-soft);color:var(--good);border-color:transparent}
@@ -85,16 +61,14 @@ button{cursor:pointer}
 .pill .dot{width:7px;height:7px;border-radius:50%;background:currentColor}
 
 /* ---------- buttons ---------- */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:10px;padding:9px 16px;font-weight:600;font-size:.92rem;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);transition:background .15s,border-color .15s,transform .05s;text-decoration:none;white-space:nowrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:6px;padding:9px 16px;font-weight:600;font-size:.92rem;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);transition:background .15s,border-color .15s,transform .05s;text-decoration:none;white-space:nowrap}
 .btn:hover{background:var(--surface-2)}
 .btn:active{transform:translateY(1px)}
 .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
-:root[data-theme="dark"] .btn.primary{color:#0D141B}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn.primary{color:#0D141B}}
 .btn.primary:hover{filter:brightness(1.08)}
 .btn.ghost{border-color:transparent;background:transparent;color:var(--accent-ink)}
 .btn.ghost:hover{background:var(--accent-soft)}
-.btn.sm{padding:6px 12px;font-size:.84rem;border-radius:8px}
+.btn.sm{padding:6px 12px;font-size:.84rem;border-radius:8px;min-height:44px}
 .btn.danger{color:var(--crit);border-color:var(--crit-soft);background:var(--crit-soft)}
 .btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
 .btn svg{width:16px;height:16px}
@@ -105,11 +79,11 @@ button{cursor:pointer}
 .rail .who{padding:12px 12px 14px;margin-bottom:6px;border-radius:var(--r-md);background:var(--surface);border:1px solid var(--line)}
 .rail .who .name{font-weight:650;font-size:.95rem}
 .rail .who .sub{font-size:.8rem;color:var(--muted);margin-top:2px}
-.navbtn{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:0;background:transparent;padding:9px 12px;border-radius:10px;font-weight:600;color:var(--muted);font-size:.92rem}
+.navbtn{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:0;background:transparent;padding:9px 12px;min-height:44px;border-radius:10px;font-weight:600;color:var(--muted);font-size:.92rem}
 .navbtn svg{width:18px;height:18px;flex:none;opacity:.85}
 .navbtn:hover{background:var(--surface-2);color:var(--ink)}
 .navbtn[aria-current="page"]{background:var(--accent-soft);color:var(--accent-ink)}
-.navbtn .count{margin-left:auto;font-family:var(--font-mono);font-size:.74rem;background:var(--surface);border:1px solid var(--line);padding:1px 7px;border-radius:999px;color:var(--muted)}
+.navbtn .count{margin-left:auto;font-family:var(--font-mono);font-size:.78rem;background:var(--surface);border:1px solid var(--line);padding:1px 7px;border-radius:999px;color:var(--muted)}
 .navbtn[aria-current="page"] .count{background:var(--surface)}
 .main{min-width:0;display:flex;flex-direction:column;gap:22px}
 .page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
@@ -128,15 +102,16 @@ button{cursor:pointer}
 /* ---------- landing ---------- */
 .landing{max-width:1040px;margin:0 auto;padding:48px 20px 80px;display:flex;flex-direction:column;gap:40px}
 .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:36px;align-items:center}
-.hero h1{font-size:clamp(2.1rem,4.4vw,3.2rem);font-weight:700;letter-spacing:-.02em}
-.hero h1 em{font-style:normal;color:var(--saffron)}
+.hero h1{font-size:clamp(2rem,4vw,2.9rem);font-weight:650;letter-spacing:-.025em}
+.hero h1 em{font-style:normal;color:var(--npo)}
 .hero .lede{font-size:1.08rem;color:var(--muted);max-width:52ch;margin-top:14px}
 .hero .stats{display:flex;gap:26px;margin-top:22px;flex-wrap:wrap}
 .hero .stat .v{font-family:var(--font-display);font-size:1.6rem;font-weight:700;line-height:1}
 .hero .stat .k{font-size:.8rem;color:var(--muted);margin-top:4px}
 .role-cards{display:grid;gap:14px}
-.role-card{display:block;width:100%;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:var(--r-lg);padding:20px 22px;transition:transform .15s,box-shadow .15s,border-color .15s;box-shadow:var(--shadow)}
-.role-card:hover{transform:translateY(-2px);border-color:var(--line-strong)}
+.role-card{display:block;width:100%;text-align:left;border:1px solid var(--line);border-left:4px solid var(--accent);background:var(--surface);border-radius:var(--r-sm);padding:20px 22px;transition:border-color .15s,background .15s}
+.role-card.npo{--accent:var(--npo)}.role-card.student{--accent:var(--student)}
+.role-card:hover{background:var(--surface-2)}
 .role-card .top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
 .role-card .icon{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;color:#fff}
 .role-card .icon svg{width:22px;height:22px}
@@ -144,12 +119,14 @@ button{cursor:pointer}
 .role-card.npo .icon{background:var(--npo)}
 .role-card h3{font-size:1.15rem}
 .role-card p{color:var(--muted);font-size:.92rem}
-.role-card .go{margin-top:12px;font-weight:600;font-size:.9rem;display:inline-flex;align-items:center;gap:6px}
+.role-card .go{margin-top:12px;font-weight:600;font-size:.9rem;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.role-card .go svg{width:16px;height:16px;flex:none;transition:transform .15s}
+
 .role-card.student .go{color:var(--student)}
 .role-card.npo .go{color:var(--npo)}
 .how{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 .how .step{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:18px}
-.how .step .n{font-family:var(--font-mono);font-size:.78rem;color:var(--saffron-ink);background:var(--saffron-soft);display:inline-block;padding:2px 8px;border-radius:999px;margin-bottom:10px}
+.how .step .n{font-family:var(--font-mono);font-size:.85rem;color:var(--muted);display:block;margin-bottom:8px}
 .how .step h3{font-size:1rem;margin-bottom:6px}
 .how .step p{color:var(--muted);font-size:.9rem}
 
@@ -162,12 +139,12 @@ textarea.input{min-height:90px;resize:vertical}
 .input[aria-invalid="true"]{border-color:var(--crit)}
 .err{color:var(--crit);font-size:.8rem;font-weight:500}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{border:1px solid var(--line-strong);background:var(--surface);border-radius:999px;padding:7px 13px;font-size:.88rem;font-weight:500;display:inline-flex;align-items:center;gap:7px;transition:background .12s,border-color .12s}
+.chip{border:1px solid var(--line-strong);background:var(--surface);border-radius:6px;padding:7px 13px;min-height:44px;font-size:.88rem;font-weight:500;display:inline-flex;align-items:center;gap:7px;transition:background .12s,border-color .12s}
 .chip:hover{border-color:var(--accent)}
 .chip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-ink)}
-.chip .sec{font-size:.72rem;color:var(--faint);font-weight:500}
+.chip .sec{font-size:.75rem;color:var(--faint);font-weight:500}
 .chip[aria-pressed="true"] .sec{color:inherit;opacity:.7}
-.chip.static{cursor:default;padding:4px 10px;font-size:.8rem}
+.chip.static{cursor:default;padding:4px 10px;font-size:.8rem;min-height:0}
 .chip.static.want{border-style:dashed}
 .chip.static.have{background:var(--good-soft);border-color:transparent;color:var(--good)}
 .chip.static.gain{background:var(--saffron-soft);border-color:transparent;color:var(--saffron-ink)}
@@ -198,7 +175,7 @@ textarea.input{min-height:90px;resize:vertical}
 .ring .bar{stroke:var(--accent);fill:none;stroke-width:7;stroke-linecap:round;transition:stroke-dashoffset .6s ease}
 .ring .lbl{position:absolute;inset:0;display:grid;place-items:center;text-align:center;line-height:1}
 .ring .lbl .v{font-family:var(--font-mono);font-weight:600;font-size:1.25rem}
-.ring .lbl .k{font-size:.62rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-top:3px}
+.ring .lbl .k{font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-top:3px}
 .match .title{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .match h3{font-size:1.12rem}
 .match .org{color:var(--muted);font-size:.9rem;margin-top:2px}
@@ -212,7 +189,7 @@ textarea.input{min-height:90px;resize:vertical}
 .reason.neutral{background:var(--surface-2);color:var(--muted)}
 .reason svg{width:12px;height:12px;flex:none}
 .breakdown{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:14px}
-.bd{font-size:.76rem;color:var(--muted)}
+.bd{font-size:.8rem;color:var(--muted)}
 .bd .k{display:flex;justify-content:space-between;margin-bottom:4px}
 .bd .k b{color:var(--ink);font-family:var(--font-mono);font-weight:600}
 .bd .t{height:5px;border-radius:999px;background:var(--line);overflow:hidden}
@@ -229,18 +206,27 @@ textarea.input{min-height:90px;resize:vertical}
 /* ---------- tables / lists ---------- */
 .tbl-wrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:.9rem}
-th{text-align:left;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{text-align:left;font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line)}
 td{padding:11px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
 tr:last-child td{border-bottom:0}
 td.num,th.num{text-align:right}
 .bar{height:8px;border-radius:999px;background:var(--line);overflow:hidden}
 .bar .f{height:100%;background:var(--accent);border-radius:999px}
 .bar.saffron .f{background:var(--saffron)}
-.status{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:999px}
+.status{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:600;padding:2px 8px;border-radius:4px}
 .status.applied{background:var(--surface-2);color:var(--muted)}
 .status.accepted{background:var(--good-soft);color:var(--good)}
 .status.declined{background:var(--crit-soft);color:var(--crit)}
 .status.completed{background:var(--accent-soft);color:var(--accent-ink)}
+
+.queue-tbl .school-cell{min-width:220px;width:55%}
+.fit-more{margin-top:6px}
+.fit-more summary{cursor:pointer;font-size:.8rem;font-weight:600;color:var(--accent-ink);list-style:none;display:inline-flex;align-items:center;gap:4px;padding:4px 0}
+.fit-more summary::-webkit-details-marker{display:none}
+.fit-more summary::before{content:"+";font-family:var(--font-mono)}
+.fit-more[open] summary::before{content:"\2212"}
+.toast .undo{margin-left:12px;border:0;background:transparent;color:inherit;font-weight:700;text-decoration:underline;padding:4px 6px;min-height:32px}
+.toast.has-action{pointer-events:auto}
 
 /* stat tiles */
 .tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
@@ -266,7 +252,7 @@ td.num,th.num{text-align:right}
 .bigring .bar{stroke:var(--saffron);fill:none;stroke-width:9;stroke-linecap:round}
 .bigring .lbl{position:absolute;inset:0;display:grid;place-items:center;text-align:center;line-height:1}
 .bigring .lbl .v{font-family:var(--font-mono);font-size:1.5rem;font-weight:600}
-.bigring .lbl .k{font-size:.66rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-top:4px}
+.bigring .lbl .k{font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-top:4px}
 .statement{background:var(--surface-2);border-radius:var(--r-md);padding:16px 18px;font-size:.95rem;line-height:1.65;max-width:70ch;white-space:pre-wrap}
 .timeline{display:flex;flex-direction:column;gap:0}
 .tl{display:grid;grid-template-columns:14px 1fr;gap:12px;padding:10px 0}
@@ -383,20 +369,20 @@ details.explain .body code{font-family:var(--font-mono);font-size:.8rem;backgrou
 
 /* ---------- MySkillsFuture / Skills Framework sectors used as interest categories ---------- */
 const SECTORS = [
-  {id:'env',   name:'Environmental Services', emoji:'🌱'},
-  {id:'hc',    name:'Healthcare',             emoji:'🩺'},
-  {id:'ss',    name:'Social Service',         emoji:'🤝'},
-  {id:'ict',   name:'Infocomm Technology',    emoji:'💻'},
-  {id:'media', name:'Media',                  emoji:'🎬'},
-  {id:'arts',  name:'Arts',                   emoji:'🎨'},
-  {id:'design',name:'Design',                 emoji:'✏️'},
-  {id:'food',  name:'Food Services',          emoji:'🍚'},
-  {id:'tae',   name:'Training & Adult Education', emoji:'📚'},
-  {id:'ec',    name:'Early Childhood',        emoji:'🧸'},
-  {id:'land',  name:'Landscape',              emoji:'🌳'},
-  {id:'fin',   name:'Financial Services',     emoji:'💳'},
-  {id:'log',   name:'Logistics',              emoji:'📦'},
-  {id:'tour',  name:'Tourism',                emoji:'🧭'},
+  {id:'env',   name:'Environmental Services'},
+  {id:'hc',    name:'Healthcare'},
+  {id:'ss',    name:'Social Service'},
+  {id:'ict',   name:'Infocomm Technology'},
+  {id:'media', name:'Media'},
+  {id:'arts',  name:'Arts'},
+  {id:'design',name:'Design'},
+  {id:'food',  name:'Food Services'},
+  {id:'tae',   name:'Training & Adult Education'},
+  {id:'ec',    name:'Early Childhood'},
+  {id:'land',  name:'Landscape'},
+  {id:'fin',   name:'Financial Services'},
+  {id:'log',   name:'Logistics'},
+  {id:'tour',  name:'Tourism'},
 ];
 const SEC = Object.fromEntries(SECTORS.map(s=>[s.id,s]));
 const REGIONS = ['North','North-East','East','Central','West'];
@@ -555,7 +541,9 @@ const $ = sel => document.querySelector(sel);
 const projById = id => S.projects.find(p=>p.id===id);
 const pct = x => Math.round(x*100)+'%';
 const plural=(n,w)=>n+' '+w+(n===1?'':'s');
-function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove('show'),2600); }
+function toast(msg, undo){ const t=$('#toast'); t.textContent=msg; t.classList.toggle('has-action',!!undo);
+  if(undo){ const b=document.createElement('button'); b.className='undo'; b.dataset.action='undo'; b.textContent='Undo'; toast._undo=undo; t.appendChild(b); } else toast._undo=null;
+  t.classList.add('show'); clearTimeout(toast._t); toast._t=setTimeout(()=>{t.classList.remove('show','has-action');toast._undo=null},undo?6000:2600); }
 function fmtDate(iso){ if(!iso) return ''; const d=new Date(iso+'T00:00:00'); return d.toLocaleDateString('en-SG',{day:'numeric',month:'short'}); }
 function fmtRange(a,b){ return fmtDate(a)+' – '+fmtDate(b); }
 const today='2026-09-13';
@@ -606,7 +594,7 @@ function render(){
 }
 function topbar(){
   return `<header class="topbar"><div class="topbar-in">
-    <button class="brand" data-action="home" aria-label="SparkVIA home"><span class="mark">${I.spark}</span>Spark<em>VIA</em></button>
+    <button class="brand" data-action="home" aria-label="SparkVIA home"><span class="mark">S</span>SparkVIA</button>
     <span class="pill hide-sm">Prototype · test data</span><span class="spacer"></span>
     <div class="seg" role="group" aria-label="Switch console">
       <button class="np" aria-pressed="${S.role==='org'}" data-action="role" data-role="org">Organisation</button>
@@ -617,23 +605,23 @@ function topbar(){
 function landing(){
   const totalStudents=SCHOOLS.reduce((n,s)=>n+s.cohort,0);
   return `<div class="landing">
-    <header class="row between"><span class="brand"><span class="mark">${I.spark}</span>Spark<em>VIA</em></span><span class="row"><span class="pill">EduTech 2030 · Prototype</span><button class="btn ghost sm" data-action="reset">Reset demo</button></span></header>
+    <header class="row between"><span class="brand"><span class="mark">S</span>SparkVIA</span><span class="row"><span class="pill">EduTech 2030 · Prototype</span><button class="btn ghost sm" data-action="reset">Reset demo</button></span></header>
     <section class="hero"><div>
-      <p class="eyebrow">School-level matching for passion-based volunteerism</p>
-      <h1 style="margin-top:10px">Send every project to the school that already <em>wants</em> it.</h1>
-      <p class="lede">SparkVIA builds a persona for each MOE school from its students' MySkillsFuture interest categories, then matches an organisation's project to the most compatible schools the moment it is posted — weighing interest, releasable headcount, supervisors and the term calendar.</p>
+      <p class="eyebrow">MOE VIA volunteer project matching</p>
+      <h1 style="margin-top:10px">Match volunteer projects to schools whose students are interested.</h1>
+      <p class="lede">Each school gets a profile built from its students' MySkillsFuture interest categories. When an organisation posts a project, schools are ranked by interest, students available for release, supervisors and the term calendar.</p>
       <div class="stats"><div class="stat"><div class="v num">${SCHOOLS.length}<span class="muted" style="font-size:1rem">/118</span></div><div class="k">schools in this test export</div></div>
         <div class="stat"><div class="v num">${totalStudents.toLocaleString('en-SG')}</div><div class="k">students with interest records</div></div>
         <div class="stat"><div class="v num">${SECTORS.length}</div><div class="k">MySkillsFuture sectors</div></div></div>
     </div>
     <div class="role-cards">
-      <button class="role-card npo" data-action="enter" data-role="org"><div class="top"><span class="icon">${I.building}</span><h3>I'm an organisation</h3></div><p>Post a project and get an instant ranked shortlist of compatible schools — shown as anonymised candidates with how many students are interested and could be released.</p><span class="go">Open the organisation console ${I.arrow}</span></button>
-      <button class="role-card student" data-action="enter" data-role="moe"><div class="top"><span class="icon">${I.school}</span><h3>I'm an MOE administrator</h3></div><p>See every school's persona and logistics, browse which schools lean toward which sector, and forward incoming projects to the right school for its decision.</p><span class="go">Open the MOE console ${I.arrow}</span></button>
+      <button class="role-card npo" data-action="enter" data-role="org"><div class="top"><h3>I'm an organisation</h3></div><p>Post a project and receive a ranked shortlist of schools. Schools appear anonymised, with the number of students interested and available for release.</p><span class="go">Open console ${I.arrow}</span></button>
+      <button class="role-card student" data-action="enter" data-role="moe"><div class="top"><h3>I'm an MOE administrator</h3></div><p>Review school profiles and logistics, see which sectors each school leans toward, and forward incoming projects to a school for a decision.</p><span class="go">Open console ${I.arrow}</span></button>
     </div></section>
     <section><p class="eyebrow" style="margin-bottom:12px">How it works</p><div class="how">
-      <div class="step"><span class="n">Persona</span><h3>Schools are profiled, not students</h3><p>Each school's MySkillsFuture export is aggregated into a persona: the top 3 sectors by share of students, plus releasable headcount, VIA hours budget, supervisors and exam blackouts.</p></div>
-      <div class="step"><span class="n">Match</span><h3>Instant on submission</h3><p>When an organisation posts a project, every school is scored on interest fit (50%), capacity vs. slots (20%), supervision (15%) and calendar clashes (15%). The organisation sees ranked candidates without names or locations.</p></div>
-      <div class="step"><span class="n">Forward</span><h3>MOE routes it to the school</h3><p>MOE sees the full picture, forwards the project to the best school, and records the school's decision. The organisation learns the school's identity only once it accepts.</p></div>
+      <div class="step"><span class="n">1</span><h3>Schools are profiled, not students</h3><p>Each school's MySkillsFuture export is aggregated into a profile: top 3 sectors by share of students, releasable headcount, VIA hours budget, supervisors and exam blackouts.</p></div>
+      <div class="step"><span class="n">2</span><h3>Scored on submission</h3><p>Every school is scored on interest fit (50%), capacity against slots (20%), supervision (15%) and calendar clashes (15%). The organisation sees ranked candidates without names or locations.</p></div>
+      <div class="step"><span class="n">3</span><h3>MOE forwards it</h3><p>MOE forwards the project to a school and records the decision. The organisation learns the school's identity only after the school accepts.</p></div>
     </div></section></div>`;
 }
 function navBtn(view,label,icon,count){ return `<button class="navbtn" data-action="view" data-view="${view}" aria-current="${S.view===view||(view==='projects'&&S.view==='project')||(view==='schools'&&S.view==='school')?'page':'false'}">${icon}<span>${label}</span>${count!=null?`<span class="count">${count}</span>`:''}</button>`; }
@@ -642,7 +630,7 @@ function orgNav(){ const org=ORG[S.orgId]; const mine=S.projects.filter(p=>p.org
 function moeNav(){ const q=S.projects.filter(p=>p.status==='sent').length;
   return `<div class="who"><div class="name">MOE admin</div><div class="sub">Student Development Curriculum · VIA</div></div>`+navBtn('overview','Overview',I.grid)+navBtn('queue','Match queue',I.inbox,q||null)+navBtn('schools','Schools',I.school,SCHOOLS.length)+navBtn('map','Interest map',I.map); }
 function orgSwitcher(){ return `<label class="row small muted" style="gap:8px">Viewing as <select class="input" id="org-sel" data-fid="org-sel" data-change="org" style="width:auto">${ORGS.map(o=>`<option value="${o.id}" ${o.id===S.orgId?'selected':''}>${h(o.name)}</option>`).join('')}</select></label>`; }
-function sectorPills(ids){ return ids.map(s=>`<span class="pill accent">${SEC[s].emoji} ${h(SEC[s].name)}</span>`).join(''); }
+function sectorPills(ids){ return ids.map(s=>`<span class="pill accent">${h(SEC[s].name)}</span>`).join(''); }
 function stepper(p){
   const steps=['Posted','Matched','Sent to MOE','Forwarded to school','School decision'];
   const idx={matched:1,sent:2,forwarded:3,accepted:4,declined:4}[p.status];
@@ -666,7 +654,7 @@ function vProjects(){
   </div>
   <section class="card"><div class="row between" style="margin-bottom:10px"><p class="eyebrow">Your projects</p><button class="btn sm primary" data-action="view" data-view="new">${I.plus} Post a project</button></div>
     ${mine.length?`<div class="tbl-wrap"><table><thead><tr><th>Project</th><th>Sector</th><th class="num">Slots</th><th>Best candidate</th><th>Status</th><th></th></tr></thead><tbody>
-    ${mine.map(p=>{ const top=shortlist(p)[0]; return `<tr><td><b>${h(p.title)}</b><div class="small muted">${fmtRange(p.start,p.end)} · ${p.hours} h/student</div></td><td>${p.sectors.map(s=>SEC[s].emoji+' '+SEC[s].name).join(', ')}</td><td class="num">${p.slots}</td><td><span class="num">${top.m.score}</span> <span class="small muted">fit · ${top.m.potential} potential students</span></td><td><span class="status ${p.status}">${STATUS[p.status]}</span></td><td style="text-align:right"><button class="btn sm" data-action="open-project" data-id="${p.id}">Open</button></td></tr>`; }).join('')}
+    ${mine.map(p=>{ const top=shortlist(p)[0]; return `<tr><td><b>${h(p.title)}</b><div class="small muted">${fmtRange(p.start,p.end)} · ${p.hours} h/student</div></td><td>${p.sectors.map(s=>SEC[s].name).join(', ')}</td><td class="num">${p.slots}</td><td><span class="num">${top.m.score}</span> <span class="small muted">fit · ${top.m.potential} potential students</span></td><td><span class="status ${p.status}">${STATUS[p.status]}</span></td><td style="text-align:right"><button class="btn sm" data-action="open-project" data-id="${p.id}">Open</button></td></tr>`; }).join('')}
     </tbody></table></div>`:`<div class="empty"><h3>No projects yet</h3><p>Post one and it is matched against every school immediately.</p></div>`}
   </section>`;
 }
@@ -681,7 +669,7 @@ function vNew(){
     </div>
     <label class="field">What students will do<textarea class="input" id="d-blurb" data-fid="d-blurb" data-draft="blurb" aria-invalid="${!!e.blurb}">${h(d.blurb)}</textarea>${e.blurb?`<span class="err">${e.blurb}</span>`:''}</label>
     <p class="eyebrow">Sector (MySkillsFuture) <span class="hint" style="font-weight:400;text-transform:none;letter-spacing:0">— primary first, optional secondary</span></p>${e.sectors?`<p class="err">${e.sectors}</p>`:''}
-    <div class="chips">${SECTORS.map(s=>`<button type="button" class="chip" data-fid="ds-${s.id}" data-action="toggle-sector" data-id="${s.id}" aria-pressed="${d.sectors.includes(s.id)}">${s.emoji} ${h(s.name)}${d.sectors[0]===s.id?'<span class="sec">primary</span>':d.sectors[1]===s.id?'<span class="sec">secondary</span>':''}</button>`).join('')}</div>
+    <div class="chips">${SECTORS.map(s=>`<button type="button" class="chip" data-fid="ds-${s.id}" data-action="toggle-sector" data-id="${s.id}" aria-pressed="${d.sectors.includes(s.id)}">${h(s.name)}${d.sectors[0]===s.id?'<span class="sec">primary</span>':d.sectors[1]===s.id?'<span class="sec">secondary</span>':''}</button>`).join('')}</div>
     <div class="grid four">
       <label class="field">Student slots<input class="input" type="number" min="1" id="d-slots" data-fid="d-slots" data-draft="slots" value="${d.slots}" aria-invalid="${!!e.slots}">${e.slots?`<span class="err">${e.slots}</span>`:''}</label>
       <label class="field">VIA hours per student<input class="input" type="number" min="1" id="d-hours" data-fid="d-hours" data-draft="hours" value="${d.hours}"></label>
@@ -760,7 +748,7 @@ function vOverview(){
       ${queue.length?`<div class="stack" style="gap:8px">${queue.map(p=>{ const t=shortlist(p)[0]; return `<div class="row between" style="padding:8px 0;border-bottom:1px solid var(--line)"><div><b>${h(p.title)}</b><div class="small muted">${h(ORG[p.orgId].name)} · ${p.slots} slots · ${fmtRange(p.start,p.end)}</div></div><div class="small" style="text-align:right"><b>${h(t.s.name)}</b><div class="muted">${t.m.score} fit · ${t.m.potential} students</div></div></div>`; }).join('')}</div>`:`<p class="muted small">Queue is clear.</p>`}
     </section>
     <section class="card"><p class="eyebrow" style="margin-bottom:10px">Network interest by sector</p>
-      <div class="stack" style="gap:7px">${totals.slice(0,8).map(t=>`<div class="persona"><div class="p"><div><div class="small">${t.s.emoji} ${h(t.s.name)}</div><div class="t"><div class="f" style="width:${Math.round(t.n/mx*100)}%"></div></div></div><span class="pct">${(t.n/1000).toFixed(1)}k</span></div></div>`).join('')}</div>
+      <div class="stack" style="gap:7px">${totals.slice(0,8).map(t=>`<div class="persona"><div class="p"><div><div class="small">${h(t.s.name)}</div><div class="t"><div class="f" style="width:${Math.round(t.n/mx*100)}%"></div></div></div><span class="pct">${(t.n/1000).toFixed(1)}k</span></div></div>`).join('')}</div>
       <p class="small faint" style="margin-top:8px">Students may record more than one interest. <button class="btn ghost sm" data-action="view" data-view="map">See by school</button></p>
     </section>
   </div>`;
@@ -776,14 +764,14 @@ function vSchools(){
   return `<div class="page-head"><div><h1>Schools</h1><p class="lede">Each school's persona is its top 3 MySkillsFuture sectors by share of students, alongside what it can logistically support this term.</p></div></div>
   <div class="card tight filters">
     <input class="input" style="width:220px" id="sf-q" data-fid="sf-q" data-sfilter="q" placeholder="Search school" value="${h(f.q)}" aria-label="Search school">
-    <select class="input" id="sf-sector" data-fid="sf-sector" data-sfilter="sector"><option value="all">Any persona sector</option>${SECTORS.map(s=>`<option value="${s.id}" ${f.sector===s.id?'selected':''}>${s.emoji} ${h(s.name)}</option>`).join('')}</select>
+    <select class="input" id="sf-sector" data-fid="sf-sector" data-sfilter="sector"><option value="all">Any persona sector</option>${SECTORS.map(s=>`<option value="${s.id}" ${f.sector===s.id?'selected':''}>${h(s.name)}</option>`).join('')}</select>
     <select class="input" id="sf-region" data-fid="sf-region" data-sfilter="region"><option value="all">All regions</option>${REGIONS.map(r=>`<option ${f.region===r?'selected':''}>${r}</option>`).join('')}</select>
     <span class="small muted">${plural(list.length,'school')}${f.sector!=='all'?' with '+SEC[f.sector].name+' in their top 3':''}</span></div>
   ${list.length?`<div class="grid three">${list.map(x=>schoolCard(x.s,x.per)).join('')}</div>`:`<div class="empty"><h3>No schools match</h3><p>Clear a filter to widen the list.</p></div>`}`;
 }
 function schoolCard(s,per){
   return `<button class="school" data-action="open-school" data-id="${s.id}"><div class="row between"><div><h3>${h(s.name)}</h3><div class="small muted">${s.type==='jc'?'Junior College':'Secondary'} · ${s.region} · ${s.cohort.toLocaleString('en-SG')} records</div></div></div>
-    <div class="persona">${per.map(p=>`<div class="p"><div><div class="small">${SEC[p.id].emoji} ${h(SEC[p.id].name)}</div><div class="t"><div class="f" style="width:${Math.round(p.pct/0.55*100)}%"></div></div></div><span class="pct">${pct(p.pct)}</span></div>`).join('')}</div>
+    <div class="persona">${per.map(p=>`<div class="p"><div><div class="small">${h(SEC[p.id].name)}</div><div class="t"><div class="f" style="width:${Math.round(p.pct/0.55*100)}%"></div></div></div><span class="pct">${pct(p.pct)}</span></div>`).join('')}</div>
     <div class="row small muted" style="gap:12px"><span>${I.users} ${s.releasable} releasable</span><span>${I.clock} ${s.hoursBudget} h budget</span><span>${s.supervisors} supervisors</span></div></button>`;
 }
 function vSchool(){
@@ -793,9 +781,9 @@ function vSchool(){
   return `<button class="btn ghost sm" data-action="view" data-view="schools" style="align-self:flex-start">${I.back} All schools</button>
   <div class="page-head"><div><h1>${h(s.name)}</h1><p class="lede">${s.type==='jc'?'Junior College':'Secondary school'} · ${s.region} region · ${s.enrol.toLocaleString('en-SG')} enrolled, ${s.cohort.toLocaleString('en-SG')} with MySkillsFuture interest records (${pct(s.cohort/s.enrol)})</p></div><span class="pill">Export ${fmtDate(s.updated)} 2026</span></div>
   <div class="grid two">
-    <section class="card stack"><p class="eyebrow">Persona · top 3 sectors</p><div class="row" style="gap:6px">${persona(s).map(p=>`<span class="pill accent">${SEC[p.id].emoji} ${h(SEC[p.id].name)} · ${pct(p.pct)}</span>`).join('')}</div>
+    <section class="card stack"><p class="eyebrow">Persona · top 3 sectors</p><div class="row" style="gap:6px">${persona(s).map(p=>`<span class="pill accent">${h(SEC[p.id].name)} · ${pct(p.pct)}</span>`).join('')}</div>
       <div class="divider"></div><p class="eyebrow">Full interest distribution</p>
-      <div class="stack" style="gap:6px">${dist.map(d=>`<div class="persona"><div class="p"><div><div class="small">${d.x.emoji} ${h(d.x.name)} <span class="faint">· ${d.n}</span></div><div class="t"><div class="f" style="width:${Math.round(d.p/0.55*100)}%"></div></div></div><span class="pct">${pct(d.p)}</span></div></div>`).join('')}</div></section>
+      <div class="stack" style="gap:6px">${dist.map(d=>`<div class="persona"><div class="p"><div><div class="small">${h(d.x.name)} <span class="faint">· ${d.n}</span></div><div class="t"><div class="f" style="width:${Math.round(d.p/0.55*100)}%"></div></div></div><span class="pct">${pct(d.p)}</span></div></div>`).join('')}</div></section>
     <div class="stack">
       <section class="card stack"><p class="eyebrow">Logistics capability</p>
         <dl class="klist"><dt>Releasable this term</dt><dd>${s.releasable} students (${pct(s.releasable/s.cohort)} of cohort)</dd><dt>VIA hours budget</dt><dd>${s.hoursBudget} h per student</dd><dt>Teacher supervisors</dt><dd>${s.supervisors} available · ${s.firstAid} first-aid trained</dd><dt>Supervision capacity</dt><dd>≈ ${s.supervisors*STUDENTS_PER_SUPERVISOR} students at 1 : ${STUDENTS_PER_SUPERVISOR}</dd></dl></section>
@@ -810,12 +798,12 @@ function vMap(){
   const mx=ranked[0].n;
   const heatRows=SCHOOLS.slice().sort((a,b)=>a.name.localeCompare(b.name));
   return `<div class="page-head"><div><h1>Interest map</h1><p class="lede">Schools categorised by how many of their students recorded an interest in a sector — the raw material behind every match.</p></div>
-    <label class="row small muted" style="gap:8px">Sector <select class="input" id="map-sel" data-fid="map-sel" data-change="mapSector" style="width:auto">${SECTORS.map(s=>`<option value="${s.id}" ${sec===s.id?'selected':''}>${s.emoji} ${h(s.name)}</option>`).join('')}</select></label></div>
+    <label class="row small muted" style="gap:8px">Sector <select class="input" id="map-sel" data-fid="map-sel" data-change="mapSector" style="width:auto">${SECTORS.map(s=>`<option value="${s.id}" ${sec===s.id?'selected':''}>${h(s.name)}</option>`).join('')}</select></label></div>
   <section class="card tight tbl-wrap"><table><thead><tr><th>#</th><th>School</th><th>Region</th><th class="num">Students interested</th><th style="width:30%">Share of cohort</th><th>In persona</th></tr></thead><tbody>
     ${ranked.map((r,i)=>`<tr><td class="num muted">${i+1}</td><td><button class="btn ghost sm" style="padding:2px 6px;margin-left:-6px" data-action="open-school" data-id="${r.s.id}">${h(r.s.name)}</button></td><td class="small muted">${r.s.region}</td><td class="num">${r.n}</td><td><div class="row" style="gap:8px;flex-wrap:nowrap"><div class="bar" style="flex:1"><div class="f" style="width:${Math.round(r.n/mx*100)}%"></div></div><span class="num small">${pct(r.p)}</span></div></td><td>${r.inPersona?`<span class="pill accent">Top 3</span>`:'<span class="small faint">—</span>'}</td></tr>`).join('')}
   </tbody></table></section>
   <section class="card"><div class="row between" style="margin-bottom:8px"><p class="eyebrow">Network heat map · share of cohort per sector</p><span class="legend"><i style="background:var(--surface-2)"></i>0%<i style="background:color-mix(in srgb,var(--accent) 45%,var(--surface-2))"></i>28%<i style="background:var(--accent)"></i>55%+</span></div>
-    <div class="heat"><table><thead><tr><th>School</th>${SECTORS.map(s=>`<th title="${h(s.name)}" style="text-align:center">${s.emoji}</th>`).join('')}</tr></thead><tbody>
+    <div class="heat"><table><thead><tr><th>School</th>${SECTORS.map(s=>`<th title="${h(s.name)}" style="text-align:center">${h(s.name.split(/[ &]+/).filter(Boolean).map(w=>w[0]).join("").slice(0,3).toUpperCase())}</th>`).join('')}</tr></thead><tbody>
     ${heatRows.map(s=>`<tr><td class="small" style="white-space:nowrap">${h(s.name)}</td>${SECTORS.map(x=>{ const p=s.interest[x.id]/s.cohort; return `<td class="c"><span style="${heatColor(p)}">${Math.round(p*100)}</span></td>`; }).join('')}</tr>`).join('')}
     </tbody></table></div></section>`;
 }
@@ -836,10 +824,12 @@ function queueCard(p){
   const tried=p.tried||[];
   let body='';
   if(p.status==='sent'){
-    body=`<div class="tbl-wrap"><table><thead><tr><th>Rank</th><th>School</th><th class="num">Fit</th><th>Breakdown</th><th class="num">Potential</th><th>Notes</th><th></th></tr></thead><tbody>
-      ${sl.map((x,i)=>`<tr ${tried.includes(x.s.id)?'style="opacity:.55"':''}><td class="num muted">${i+1}</td><td><b>${h(x.s.name)}</b><div class="small muted">${x.s.region} · ${x.m.interested} interested (${pct(x.m.pct)})</div></td><td class="num" style="font-size:1.05rem">${x.m.score}</td>
-        <td style="min-width:200px"><div class="breakdown" style="margin:0;gap:6px 12px;grid-template-columns:repeat(2,minmax(0,1fr))">${bd('Interest',x.m.parts.interest)}${bd('Capacity',x.m.parts.capacity)}${bd('Supervision',x.m.parts.supervision)}${bd('Calendar',x.m.parts.calendar)}</div></td>
-        <td class="num">${x.m.potential}<div class="small muted">of ${p.slots}</div></td><td>${flags(x.m.flags.filter(f=>f.k!=='ok').slice(0,2))}${tried.includes(x.s.id)?`<span class="flag bad">Declined earlier</span>`:''}</td>
+    body=`<div class="tbl-wrap"><table class="queue-tbl"><thead><tr><th>Rank</th><th>School</th><th class="num">Fit</th><th class="num">Potential</th><th></th></tr></thead><tbody>
+      ${sl.map((x,i)=>`<tr ${tried.includes(x.s.id)?'style="opacity:.55"':''}><td class="num muted">${i+1}</td><td class="school-cell"><b>${h(x.s.name)}</b><div class="small muted">${x.s.region} · ${x.m.interested} interested (${pct(x.m.pct)})</div>
+          <div class="row" style="margin-top:6px;gap:6px">${flags(x.m.flags.filter(f=>f.k!=='ok').slice(0,2))}${tried.includes(x.s.id)?`<span class="flag bad">Declined earlier</span>`:''}</div>
+          <details class="fit-more"><summary>Fit breakdown</summary><div class="breakdown" style="margin-top:8px;gap:8px 14px;grid-template-columns:repeat(2,minmax(0,1fr))">${bd('Interest',x.m.parts.interest)}${bd('Capacity',x.m.parts.capacity)}${bd('Supervision',x.m.parts.supervision)}${bd('Calendar',x.m.parts.calendar)}</div></details></td>
+        <td class="num" style="font-size:1.15rem"><b>${x.m.score}</b></td>
+        <td class="num">${x.m.potential}<div class="small muted">of ${p.slots}</div></td>
         <td style="text-align:right;white-space:nowrap">${tried.includes(x.s.id)?'':`<button class="btn sm ${i===0?'primary':''}" data-action="forward" data-id="${p.id}" data-school="${x.s.id}">Forward</button>`}</td></tr>`).join('')}
     </tbody></table></div>`;
   } else {
@@ -869,7 +859,8 @@ document.addEventListener('click', ev=>{
     case 'draft-clear': S.draft=null; render(); break;
     case 'draft-submit': if(validateDraft()){ const d=draft(); const p={id:'pr'+Date.now(), orgId:S.orgId, title:d.title.trim(), blurb:d.blurb.trim(), sectors:[...d.sectors], slots:+d.slots, hours:+d.hours||1, start:d.start, end:d.end, firstAid:!!d.firstAid, region:d.region, createdAt:today, status:'matched', sentTo:0}; S.projects.push(p); S.draft=null; S.openProject=p.id; S.view='project'; toast('Matched against '+SCHOOLS.length+' schools in '+(2+Math.floor(Math.random()*4))+' ms'); } render(); window.scrollTo(0,0); break;
     case 'send-moe': { const p=projById(id); p.status='sent'; p.sentTo=+el.dataset.n; p.sentAt=today; toast('Sent to MOE — top '+p.sentTo+' candidates'); render(); break; }
-    case 'forward': { const p=projById(id); p.status='forwarded'; p.forwardedTo=el.dataset.school; p.forwardedAt=today; toast('Forwarded to '+SCHOOL[p.forwardedTo].name+' for decision'); render(); break; }
+    case 'forward': { const p=projById(id); const prev={status:p.status,forwardedTo:p.forwardedTo,forwardedAt:p.forwardedAt}; p.status='forwarded'; p.forwardedTo=el.dataset.school; p.forwardedAt=today; toast('Forwarded to '+SCHOOL[p.forwardedTo].name+' for decision', ()=>{ Object.assign(p,prev); render(); toast('Forward undone'); }); render(); break; }
+    case 'undo': { const u=toast._undo; if(u) u(); break; }
     case 'decide': { const p=projById(id); p.status=el.dataset.d; p.decidedAt=today; if(p.status==='declined'){ p.declineReason='Insufficient supervisors in that window'; p.tried=[...(p.tried||[]), p.forwardedTo]; toast('Recorded: declined — forward to the next candidate when ready'); } else toast('Recorded: accepted — '+ORG[p.orgId].name+' can now see the school'); render(); break; }
     case 'resend': { const p=projById(id); p.tried=[...new Set([...(p.tried||[]), p.forwardedTo])]; p.status='sent'; p.forwardedTo=null; p.decidedAt=null; p.declineReason=null; if(S.role==='org') toast('MOE asked to forward to the next candidate'); render(); break; }
     case 'qfilter': S.queueFilter=id; render(); break;
